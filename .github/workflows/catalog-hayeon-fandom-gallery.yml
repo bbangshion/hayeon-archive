@@ -1,0 +1,618 @@
+name: HAYEON GALLERY - Import Fandom Photos
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'catalog = source index; publish_selected = approved IDs only'
+        type: choice
+        options: ['catalog', 'publish_selected']
+        default: catalog
+        required: true
+      selected_ids:
+        description: 'publish_selected: reviewed image IDs separated by comma (max 75)'
+        required: false
+        default: ''
+      rights_confirmation:
+        description: 'publish_selected: I_HAVE_REUSE_RIGHTS for every selected image'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: hayeon-fandom-gallery-import
+  cancel-in-progress: false
+jobs:
+  import:
+    if: github.ref == 'refs/heads/main' && github.repository == 'bbangshion/hayeon-archive'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout HAYEON ARCHIVE
+        uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install parser and image libraries
+        run: python -m pip install --disable-pip-version-check 'requests>=2.32,<3' 'beautifulsoup4>=4.12,<5' 'Pillow>=10,<13'
+      - name: Collect and classify gallery image files
+        env:
+          MODE: ${{ inputs.mode }}
+          SELECTED_IDS: ${{ inputs.selected_ids }}
+          RIGHTS_CONFIRMATION: ${{ inputs.rights_confirmation }}
+        shell: bash
+        run: |
+          python - <<'PYCODE'
+          #!/usr/bin/env python3
+          """Kim HaYeon fandom gallery -> source catalog and optional local PHOTO import.
+          Only the user-named Gallery page is scanned; Objekts, SNS Archive and video embeds are excluded.
+          """
+          from __future__ import annotations
+          import collections
+          import datetime as dt
+          import hashlib
+          import io
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import sys
+          import time
+          from urllib.parse import quote, unquote, urlparse
+
+          import requests
+          from bs4 import BeautifulSoup, Tag
+          from PIL import Image, ImageOps, UnidentifiedImageError
+
+          BASE = 'https://triples.fandom.com'
+          PAGE = BASE + '/wiki/Jeong_HaYeon/Gallery'
+          API = BASE + '/api.php'
+          REPORT = Path('reports/hayeon-fandom-gallery.json')
+          PHOTOS = Path('public/data/photos.json')
+          OUTDIR = Path('public/images/hayeon-fandom')
+          ALBUMS = {
+              'Promotional': ('공식 콘셉트·프로모션', 'Promotional', '公式コンセプト'),
+              'Pictorial': ('화보·매거진', 'Pictorial', 'グラビア・雑誌'),
+              'Misc.': ('프로필·기타', 'Profile & Misc.', 'プロフィール・その他'),
+              'Behinds': ('비하인드·현장', 'Behind the scenes', 'ビハインド'),
+              'Stages': ('무대·공연', 'Stages', 'ステージ'),
+              'Review': ('분류 검토 필요', 'Needs review', '分類確認待ち'),
+          }
+          ALIASES = {
+              'Promotional': 'Promotional', 'Promotions': 'Promotional',
+              'Pictorial': 'Pictorial', 'Pictorials': 'Pictorial',
+              'Misc': 'Misc.', 'Misc.': 'Misc.', 'Miscellaneous': 'Misc.',
+              'Behind': 'Behinds', 'Behinds': 'Behinds', 'Behind the Scenes': 'Behinds',
+              'Stages': 'Stages', 'Stage': 'Stages',
+              'Videos': 'SKIP', 'Video': 'SKIP', 'Fancams': 'SKIP', 'Fancam': 'SKIP',
+              'Objekts': 'SKIP', 'Polaroids': 'SKIP',
+          }
+          PICTURE = re.compile(r'\.(?:png|jpe?g|webp|avif|bmp)$', re.I)
+          FILE_REF = re.compile(r'(?:^|/)(?:File|Image):(.+)$', re.I)
+          HEAD = re.compile(r'^\s*(={2,6})\s*(.*?)\s*\1\s*$')
+          YEAR = re.compile(r'^(20\d{2})$')
+          WIKI_IMAGE = re.compile(r'(?:File|Image):([^\]|\n<>]+\.(?:jpg|jpeg|png|webp|avif|bmp))', re.I)
+          FIELDS = 'text|wikitext|images'
+          USER_AGENT = 'Mozilla/5.0 (compatible; HAYEON-ARCHIVE-FanGallery/1.0; curated fan archive)'
+          session = requests.Session()
+          session.headers.update({'User-Agent': USER_AGENT, 'Accept-Language': 'en-US,en;q=0.8'})
+
+
+          def http_get(url, params=None, *, json_mode=False, timeout=45):
+              # Restrict all page fetches to the nominated wiki or Fandom-hosted images.
+              domain = urlparse(url).hostname or ''
+              if domain not in ('triples.fandom.com', 'static.wikia.nocookie.net', 'vignette.wikia.nocookie.net'):
+                  raise RuntimeError('URL host not permitted: ' + domain)
+              last = None
+              for attempt in range(3):
+                  try:
+                      resp = session.get(url, params=params, timeout=timeout, allow_redirects=True)
+                      if urlparse(resp.url).hostname not in ('triples.fandom.com', 'static.wikia.nocookie.net', 'vignette.wikia.nocookie.net'):
+                          raise RuntimeError('Unexpected Fandom redirect destination')
+                      if resp.status_code in (429, 500, 502, 503, 504):
+                          last = f'HTTP {resp.status_code}'
+                          time.sleep(2 * (attempt + 1))
+                          continue
+                      resp.raise_for_status()
+                      return resp.json() if json_mode else resp
+                  except (requests.Timeout, requests.ConnectionError) as e:
+                      last = type(e).__name__
+                      time.sleep(2 * (attempt + 1))
+                  except requests.HTTPError as e:
+                      raise RuntimeError(f'Fandom request rejected: HTTP {e.response.status_code}. Check Fandom API access.') from None
+              raise RuntimeError('Fandom server unavailable: ' + str(last))
+
+
+          def clean(text):
+              text = re.sub(r'</?(?:br|span|div|small|b|i)(?:\s+[^>]*)?>', ' ', text, flags=re.I)
+              text = re.sub(r'\[\[[^\]]*\|([^\]]+)\]\]', r'\1', text)
+              return re.sub(r'\s+', ' ', text).strip()
+
+
+          def map_section(label):
+              label = clean(label).replace('[]', '').strip().strip('§').strip()
+              if label in ALIASES:
+                  return ALIASES[label]
+              return None
+
+
+          def file_name(raw):
+              raw = unquote(str(raw)).replace('_', ' ').strip()
+              if raw.lower().startswith(('file:', 'image:')):
+                  raw = raw.split(':', 1)[1]
+              raw = raw.split('#', 1)[0].split('?', 1)[0].strip()
+              return raw if PICTURE.search(raw) and len(raw) < 260 else None
+
+
+          def build_item(name, category, year, event, caption, seq):
+              name = file_name(name)
+              if not name or category not in ALBUMS:
+                  return None
+              event = clean(event)[:100] or category
+              caption = clean(caption)[:120]
+              # Stable id across reruns. Duplicates across sections are one photo.
+              digest = hashlib.sha256(name.casefold().encode('utf-8')).hexdigest()[:24]
+              return {
+                  'id': 'hy-fandom-' + digest,
+                  'fileTitle': 'File:' + name,
+                  'filePageUrl': BASE + '/wiki/File:' + quote(name.replace(' ', '_'), safe=''),
+                  'galleryPageUrl': PAGE,
+                  'category': category,
+                  'year': year,
+                  'event': event,
+                  'caption': caption,
+                  'sortIndex': seq,
+                  'status': 'catalogued',
+              }
+
+
+          def normalize_heading(s):
+              headline=s.select_one('.mw-headline')
+              return clean((headline or s).get_text(' ', strip=True)).replace('[edit]', '').strip()
+
+
+          def file_from_img(img):
+              parent = img
+              for _ in range(7):
+                  if not parent or not isinstance(parent, Tag):
+                      break
+                  for attr in ('data-image-name', 'data-item-name'):
+                      if parent.get(attr):
+                          val = file_name(parent.get(attr))
+                          if val:
+                              return val
+                  if parent.name == 'a':
+                      link = parent.get('href', '')
+                      match = FILE_REF.search(unquote(urlparse(link).path))
+                      if match:
+                          val = file_name(match.group(1))
+                          if val:
+                              return val
+                  parent = parent.parent
+              return None
+
+
+          def parse_html(html):
+              soup = BeautifulSoup(html, 'html.parser')
+              root = soup.select_one('.mw-parser-output') or soup.select_one('#mw-content-text') or soup.select_one('main')
+              if root is None:
+                  raise RuntimeError('Fandom article body missing; not importing unrelated images')
+              major = None
+              year = None
+              event = ''
+              items = []
+              for el in root.descendants:
+                  if not isinstance(el, Tag):
+                      continue
+                  if el.name in ('h2','h3','h4','h5'):
+                      label = normalize_heading(el)
+                      sec = map_section(label)
+                      if sec is not None:
+                          major = sec
+                          year, event = None, ''
+                      elif YEAR.fullmatch(label):
+                          year = label
+                          event = ''
+                      elif major in ALBUMS:
+                          event = label
+                      continue
+                  if el.name != 'img' or major not in ALBUMS:
+                      continue
+                  fname = file_from_img(el)
+                  if fname:
+                      wrapper = el.find_parent(class_=re.compile(r'(gallerybox|wikia-gallery-item|gallery-item)', re.I))
+                      caption = ''
+                      if wrapper:
+                          c = wrapper.select_one('.gallerytext, .lightbox-caption, figcaption, .gallery-caption')
+                          if c:
+                              caption = c.get_text(' ', strip=True)
+                      item = build_item(fname, major, year, event, caption or el.get('alt', ''), len(items))
+                      if item:
+                          items.append(item)
+              return items
+
+
+          def parse_wikitext(wikitext):
+              """Parse gallery file entries inside Fandom <tabber> and standard headings.
+
+              On this wiki, Promotional/Pictorial/Misc/Behinds/Stages are TAB labels,
+              not necessarily H2 headings; older parser missed every image.
+              """
+              major, year, event = None, None, ''
+              items = []
+              in_gallery = False
+              in_tabber = False
+              tabber_open = re.compile(r'<tabber\b', re.I)
+              tabber_tab = re.compile(r'^\s*\|-\|\s*([^=]+?)\s*(?:=\s*)?$', re.I)
+              tabber_named = re.compile(r'^\s*(Promotional|Pictorial|Misc\.?|Behinds|Stages|Videos|Fancams)\s*=\s*$', re.I)
+              file_link = re.compile(r'\[\[\s*(?:File|Image)\s*:\s*([^\]|\n]+?\.(?:jpe?g|png|webp|avif|bmp))', re.I)
+              gallery_line = re.compile(r'^\s*((?:(?:File|Image):)?[^|<>\n]+?\.(?:jpe?g|png|webp|avif|bmp))\s*(?:\|\s*(.*))?$', re.I)
+              for line in wikitext.splitlines():
+                  if tabber_open.search(line):
+                      in_tabber = True
+                  if re.search(r'</tabber\s*>', line, re.I):
+                      in_tabber = False
+                  m = tabber_tab.match(line) if in_tabber else None
+                  if not m and in_tabber:
+                      m = tabber_named.match(line)
+                  if m:
+                      sec = map_section(m.group(1).strip())
+                      # Never accidentally attribute another member / video tab.
+                      major = sec
+                      year, event, in_gallery = None, '', False
+                      continue
+                  m = HEAD.match(line)
+                  if m:
+                      label = clean(m.group(2))
+                      sec = map_section(label)
+                      if sec is not None:
+                          major, year, event = sec, None, ''
+                      elif YEAR.fullmatch(label):
+                          year, event = label, ''
+                      elif major in ALBUMS:
+                          event = label
+                      continue
+                  if re.search(r'<gallery\b', line, re.I):
+                      in_gallery = True
+                  if major in ALBUMS and major != 'Review':
+                      seen = set()
+                      for m in file_link.finditer(line):
+                          fname = file_name(m.group(1))
+                          if fname:
+                              item = build_item(fname, major, year, event, '', len(items))
+                              if item:
+                                  items.append(item)
+                                  seen.add(fname.casefold())
+                      if in_gallery:
+                          m = gallery_line.match(line)
+                          if m:
+                              fname = file_name(m.group(1))
+                              if fname and fname.casefold() not in seen:
+                                  item = build_item(fname, major, year, event, m.group(2) or '', len(items))
+                                  if item:
+                                      items.append(item)
+                  if re.search(r'</gallery\s*>', line, re.I):
+                      in_gallery = False
+              return items
+
+
+          def api_gallery_images():
+              """MediaWiki images endpoint, independent of Fandom's tab HTML.
+              Returns file titles included by the named page, not arbitrary wiki files.
+              """
+              result = []
+              continuation = {}
+              for _ in range(40):
+                  params = {'action': 'query', 'titles': 'Jeong_HaYeon/Gallery',
+                            'prop': 'images', 'imlimit': 'max', 'format': 'json', **continuation}
+                  data = http_get(API, params, json_mode=True)
+                  if data.get('error'):
+                      raise RuntimeError('Fandom images API error: ' + str(data['error'].get('code', '?')))
+                  pages = (data.get('query') or {}).get('pages') or {}
+                  for page in pages.values():
+                      for row in page.get('images', []):
+                          result.append(row.get('title') or '')
+                  continuation = data.get('continue') or {}
+                  if not continuation:
+                      break
+              return result
+
+
+          def get_page():
+              api_error = None
+              try:
+                  payload = http_get(API, {'action':'parse', 'page':'Jeong_HaYeon/Gallery',
+                                            'prop':FIELDS, 'format':'json', 'disablelimitreport':1}, json_mode=True)
+                  if 'error' in payload:
+                      raise RuntimeError('MediaWiki error: ' + str(payload['error'].get('code', '?')))
+                  parsed = payload['parse']
+                  html = parsed.get('text') or {}
+                  wikitext = parsed.get('wikitext') or {}
+                  h = html.get('*', '') if isinstance(html, dict) else str(html)
+                  w = wikitext.get('*', '') if isinstance(wikitext, dict) else str(wikitext)
+                  images = parsed.get('images') or []
+                  print(f'Fandom parse API: HTML={len(h)}, wikitext={len(w)}, direct images={len(images)}')
+                  return h, w, images
+              except (RuntimeError, KeyError, ValueError, requests.RequestException) as exc:
+                  api_error = str(exc)
+              for url in (PAGE + '?action=render', PAGE):
+                  try:
+                      html = http_get(url).text
+                      if 'mw-parser-output' in html:
+                          print('Fandom API unavailable; using rendered page fallback.')
+                          return html, '', []
+                  except RuntimeError:
+                      pass
+              raise RuntimeError('Could not retrieve gallery from Fandom. First API error: ' + str(api_error))
+
+
+          def combine(items):
+              """Merges metadata and keeps source order; never invents missing dates."""
+              result = {}
+              for row in items:
+                  old = result.get(row['id'])
+                  if not old:
+                      result[row['id']] = row
+                  else:
+                      if row.get('caption') and len(row['caption']) > len(old.get('caption','')):
+                          old['caption'] = row['caption']
+                      if not old.get('year') and row.get('year'):
+                          old['year'] = row['year']
+                      if not old.get('event') and row.get('event'):
+                          old['event'] = row['event']
+              return list(result.values())
+
+
+          def resolve_imageinfo(rows):
+              """Use MediaWiki imageinfo to resolve original media URL; fail rather than invent URLs."""
+              urls = {}
+              for start in range(0, len(rows), 45):
+                  chunk = rows[start:start+45]
+                  title = '|'.join(row['fileTitle'] for row in chunk)
+                  data = http_get(API, {'action':'query', 'titles': title, 'prop':'imageinfo',
+                                        'iiprop':'url|mime|size', 'iiurlwidth':1600,
+                                        'format':'json'}, json_mode=True)
+                  if 'error' in data:
+                      raise RuntimeError('Fandom imageinfo API error: '+str(data['error'].get('code')))
+                  for page in (data.get('query') or {}).get('pages', {}).values():
+                      if not isinstance(page, dict):
+                          continue
+                      fname = file_name(page.get('title', ''))
+                      info = (page.get('imageinfo') or [])[:1]
+                      if fname and info:
+                          info=info[0]
+                          url=info.get('thumburl') or info.get('url')
+                          if url and urlparse(url).hostname in ('static.wikia.nocookie.net','vignette.wikia.nocookie.net'):
+                              urls[fname.casefold()] = {
+                                  'imageUrl': url, 'mime': info.get('mime') or '',
+                                  'width': info.get('thumbwidth') or info.get('width'),
+                                  'height': info.get('thumbheight') or info.get('height'),
+                              }
+                  time.sleep(0.15)
+              for row in rows:
+                  row.update(urls.get(row['fileTitle'][5:].casefold(), {}))
+              return sum(bool(row.get('imageUrl')) for row in rows)
+
+
+          def save(path, obj):
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+
+
+          def load_photos():
+              if not PHOTOS.is_file():
+                  raise RuntimeError('Cannot find public/data/photos.json; refusing to create a replacement file')
+              data=json.loads(PHOTOS.read_text(encoding='utf-8'))
+              if isinstance(data, list):
+                  return data, None
+              if isinstance(data, dict) and isinstance(data.get('photos'), list):
+                  return data['photos'], data
+              raise RuntimeError('Existing photos.json is not a list or {photos:[...]}')
+
+
+          def image_fetch(url):
+              resp=http_get(url, timeout=60)
+              if len(resp.content) > 18_000_000:
+                  raise RuntimeError('Image too large')
+              if 'image/' not in resp.headers.get('Content-Type','image/').lower():
+                  raise RuntimeError('Unexpected content type')
+              return resp.content
+
+
+          def to_photo(row, media_path, digest):
+              album=ALBUMS[row['category']]
+              event=row['event'] or row['category']
+              label=(event+' · '+row['caption'][:48]).strip(' ·') if row.get('caption') else event
+              title=((row.get('year')+' · ') if row.get('year') else '') + label[:100]
+              tags=['정하연','하연','HaYeon','S19','tripleS',row['category'],event]
+              if row.get('year'):
+                  tags.append(row['year'])
+              return {
+                  'id':row['id'], 'category':'photo', 'memberId':'S19',
+                  'image':'images/hayeon-fandom/'+media_path.name,
+                  'title':{'ko':title, 'en':title, 'ja':title},
+                  'album':{'ko':album[0], 'en':album[1], 'ja':album[2]},
+                  'date':None, 'year':row['year'], 'captureDateVerified':False,
+                  'credit':{'ko':'원본 권리자 별도 · 출처: tripleS Wiki (Fandom) · 정리: 빵시온',
+                            'en':'Original rights holders vary · Source: tripleS Wiki (Fandom) · Curated by bbangshion',
+                            'ja':'原権利者は別途 · 出典: tripleS Wiki (Fandom) · 整理: bbangshion'},
+                  'sourceUrl':row['filePageUrl'], 'gallerySourceUrl':PAGE,
+                  'sourceType':'fandom-gallery', 'assetType':'wiki-reference',
+                  'rightsStatus':'user-confirmed',
+                  'sha256':digest, 'sourceFileTitle':row['fileTitle'],
+                  'tags':tags[:20], 'identityVerified':False,
+              }
+
+
+          def publish(rows):
+              photos, wrapper=load_photos()
+              existing_ids={x['id'] for x in photos if isinstance(x,dict) and x.get('id')}
+              existing_sources={str(x.get('sourceFileTitle','')).casefold() for x in photos if isinstance(x,dict)}
+              existing_hashes={x.get('sha256') for x in photos if isinstance(x,dict) and x.get('sha256')}
+              added=errors=duplicates=0
+              error_details=[]
+              OUTDIR.mkdir(parents=True,exist_ok=True)
+              for n,row in enumerate(rows, 1):
+                  if row['id'] in existing_ids or row['fileTitle'].casefold() in existing_sources:
+                      duplicates+=1
+                      continue
+                  if not row.get('imageUrl'):
+                      errors+=1
+                      error_details.append({'fileTitle':row['fileTitle'], 'reason':'MediaWiki image URL missing'})
+                      continue
+                  try:
+                      raw=image_fetch(row['imageUrl'])
+                      with Image.open(io.BytesIO(raw)) as photo:
+                          photo=ImageOps.exif_transpose(photo)
+                          if min(photo.size)<100:
+                              raise RuntimeError('Not a photo-sized image')
+                          photo.thumbnail((1600,2200))
+                          if photo.mode not in ('RGB','L'):
+                              photo=photo.convert('RGB')
+                          converted=io.BytesIO()
+                          photo.save(converted,format='WEBP',quality=83,method=5)
+                      binary=converted.getvalue()
+                      digest=hashlib.sha256(binary).hexdigest()
+                      if digest in existing_hashes:
+                          duplicates+=1
+                          continue
+                      filename=row['id']+'.webp'
+                      path=OUTDIR/filename
+                      path.write_bytes(binary)
+                      photos.append(to_photo(row,path,digest))
+                      existing_ids.add(row['id'])
+                      existing_sources.add(row['fileTitle'].casefold())
+                      existing_hashes.add(digest)
+                      row['status']='published'
+                      row['localFile']=str(path)
+                      added+=1
+                  except (RuntimeError, requests.RequestException, OSError, ValueError, UnidentifiedImageError) as exc:
+                      errors+=1
+                      error_details.append({'fileTitle':row['fileTitle'], 'reason':type(exc).__name__+' '+str(exc)[:150]})
+                  if n%25 == 0:
+                      print(f'processed {n}/{len(rows)}, added={added}, skipped={duplicates}, errors={errors}')
+                      time.sleep(0.3)
+              if added:
+                  save(PHOTOS, photos if wrapper is None else dict(wrapper,photos=photos))
+              return added, duplicates, errors, error_details
+
+
+          def summary(report, mode):
+              rows=report['items']
+              counts=collections.Counter(row['category'] for row in rows)
+              years=collections.Counter(row.get('year') or 'unverified' for row in rows)
+              lines=[f'## HAYEON · Fandom Gallery {mode}',
+                     f'- Source: {PAGE}',f'- Catalogued photos: **{len(rows)}**',
+                     f'- Resolved original image URLs: **{sum(bool(r.get("imageUrl")) for r in rows)}**',
+                     f'- Excluded: videos, fancams, objekts, polaroids (separate pages)',
+                     f'- Newly published: **{report.get("newlyPublished",0)}**',
+                     f'- Existing/duplicate skipped: **{report.get("duplicatesSkipped",0)}**',
+                     f'- Download failures: **{report.get("downloadErrors",0)}**',
+                     '', '### Categories',
+                     *[f'- {ALBUMS[k][0]} ({k}): **{counts[k]}**' for k in ALBUMS],
+                     '', '### Year markers (not exact shoot dates)',
+                     *[f'- {key}: {value}' for key,value in sorted(years.items())],
+                     '', '- Data: `reports/hayeon-fandom-gallery.json`',
+                     '- Photo UI: `public/data/photos.json` (only after publishing)',
+                     '- Exact date unknown is stored as null; no fabricated dates.',
+                     '- Publishing requires confirmation of reuse rights for every image.']
+              print('\n'.join(lines))
+              if os.environ.get('GITHUB_STEP_SUMMARY'):
+                  with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:
+                      f.write('\n'.join(lines)+'\n')
+
+
+          def main():
+              mode=os.getenv('MODE','catalog').lower()
+              if mode not in ('catalog','publish_selected'):
+                  raise SystemExit('mode must be catalog or publish_selected')
+              rawids=os.environ.get('SELECTED_IDS','')
+              selected_ids=set(x.strip() for x in rawids.split(',') if x.strip())
+              if mode=='publish_selected':
+                  if os.getenv('RIGHTS_CONFIRMATION')!='I_HAVE_REUSE_RIGHTS':
+                      raise SystemExit('STOP: confirm reuse rights for every selected image')
+                  if not 1<=len(selected_ids)<=75 or any(not re.fullmatch(r'hy-fandom-[a-f0-9]{24}',x) for x in selected_ids):
+                      raise SystemExit('Choose 1 to 75 hy-fandom-... IDs from the source report')
+              html,wikitext,parsed_images=get_page()
+              try:
+                  html_items=parse_html(html) if html else []
+              except RuntimeError:
+                  html_items=[]  # Fall back to wikitext rather than accidentally using site chrome.
+              wiki_items=parse_wikitext(wikitext) if wikitext else []
+              # Prefer full rendered image order when sufficient and use raw wikitext to fill gaps.
+              items=combine(html_items+wiki_items)
+              categorized=len(items)
+              # Robust fallback: list files via MediaWiki's article images API.
+              # Uncategorized files are candidates ONLY; never invent an activity.
+              image_titles=list(parsed_images)
+              try:
+                  image_titles.extend(api_gallery_images())
+              except RuntimeError as err:
+                  print('Fallback query images API unavailable:', str(err)[:160])
+              known = {r['fileTitle'].casefold() for r in items}
+              for raw in image_titles:
+                  if isinstance(raw, dict):
+                      raw = raw.get('title') or raw.get('name') or ''
+                  fname = file_name(raw)
+                  if not fname or ('File:' + fname).casefold() in known:
+                      continue
+                  item=build_item(fname, 'Review', None, '분류 검토 필요', '', len(items))
+                  if item:
+                      items.append(item)
+                      known.add(item['fileTitle'].casefold())
+              print(f'Gallery parsing: HTML categories={len(html_items)}, raw/tabber={len(wiki_items)}, '
+                    f'API candidate titles={len(image_titles)}, total={len(items)}')
+              if not items:
+                  print('Diagnostics: Fandom page returned no File titles in HTML, wikitext or MediaWiki images API.')
+                  print('Diagnostics: wikitext begins with', repr((wikitext or '')[:260]))
+                  raise SystemExit('Fandom gallery contained no resolvable image file references; no site files changed')
+              resolved=resolve_imageinfo(items)
+              if mode=='publish_selected':
+                  by_id={row['id']:row for row in items}
+                  unknown=selected_ids-set(by_id)
+                  if unknown:
+                      raise SystemExit(f'STOP: {len(unknown)} selected IDs not found in this Fandom catalog')
+              print(f'Imageinfo resolved: {resolved}/{len(items)} (unresolved entries stay review-only)')
+              report={'source':PAGE,'retrievedAt':dt.datetime.now(dt.timezone.utc).isoformat(),
+                      'note':'Gallery includes many different copyright owners. Confirm reuse rights before publishing.',
+                      'excluded':['Videos','Fancams','Objekts','Polaroids','SNS Archive'],
+                      'catalogueCount':len(items),'resolvedCount':resolved,
+                      'mode':mode,'categorizedCount':categorized,
+                      'reviewRequiredCount':len(items)-categorized,'items':items}
+              if mode=='publish_selected':
+                  selected=[row for row in items if row['id'] in selected_ids]
+                  count, duplicate, errors, details=publish(selected)
+                  report.update({'newlyPublished':count, 'duplicatesSkipped':duplicate, 'downloadErrors':errors, 'errors':details[:150]})
+              save(REPORT,report)
+              public_catalog=Path('public/data/hayeon-photo-source-index.json')
+              save(public_catalog, {'source':PAGE,'catalogueCount':len(items),'resolvedCount':resolved,
+                                   'note':'Source links only. These images have not been republished or checked for individual rights.',
+                                   'items':[{'id':row['id'],'category':row['category'],'year':row.get('year'),
+                                             'event':row.get('event'),'filePageUrl':row.get('filePageUrl')} for row in items]})
+              summary(report,mode)
+
+
+          if __name__=='__main__':
+              main()
+
+          PYCODE
+      - name: Commit categorised data and new photos
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- reports/hayeon-fandom-gallery.json public/data/hayeon-photo-source-index.json
+          if [ -d public/images/hayeon-fandom ]; then
+            git add -- public/images/hayeon-fandom
+          fi
+          git add -- public/data/photos.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'gallery: categorize Jeong HaYeon Fandom photos'
+            git push
+          else
+            echo 'No new or modified photo metadata.'
+          fi
+      - name: Next steps
+        run: |
+          echo '## Next: site deployment' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Review the catalog and copyright status first; this workflow does not publish photos.' >> "$GITHUB_STEP_SUMMARY"
