@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const read = path => JSON.parse(fs.readFileSync(path, 'utf8'));
+const photos = read('public/data/photos.json');
+const films = read('public/data/films.json');
+const objekts = read('public/data/objekt.json');
+const activity = read('public/data/hayeon-activities.json');
+if (!Array.isArray(photos) || !photos.every(p => p.memberId === 'S19')) throw Error('Invalid S19 photos.json');
+if (!Array.isArray(films.items) || !films.items.every(v => v.memberIds?.includes('S19') && /^[\w-]{11}$/.test(v.youtubeId))) throw Error('Invalid S19 films.json');
+if (!Array.isArray(objekts.objekts) || !objekts.objekts.every(o => o.member === 'S19_HAYEON' && !o.demo)) throw Error('Invalid S19 Objekt membership or demo data');
+if (!Array.isArray(activity.activities) || !activity.activities.every(v => v.s19 === true)) throw Error('Invalid S19 activity list');
+if (!fs.existsSync('public/images/hayeon-home.jpg')) throw Error('Missing user-supplied cover photo');
+console.log(`HAYEON audit passed. Photos=${photos.length}; Films=${films.items.length}; Objekts=${objekts.objekts.length}; Activity=${activity.activities.length}`);

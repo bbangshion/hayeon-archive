@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "generatedAt": "2026-11-23",
+  "sourceNote": "Verified video URLs from public search; embeds subject to uploaders setting",
+  "items": [
+    {
+      "youtubeId": "mFQ2jlokX7o",
+      "title": "NXT 〈Just Do It〉 Official Lyric Video",
+      "category": "music",
+      "publishedAt": "2023-12-23",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "NXT",
+      "scope": "unit",
+      "source": "tripleS official",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    },
+    {
+      "youtubeId": "TvmLPQ7iBLQ",
+      "title": "msnz zenith 〈Q&A〉 Official MV",
+      "category": "music",
+      "publishedAt": "2025-11-24",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "zenith",
+      "scope": "unit",
+      "source": "tripleS official",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    },
+    {
+      "youtubeId": "XAoIf1eEHQE",
+      "title": "정하연 〈Baby Flower〉 직캠 · SBS 인기가요",
+      "category": "performance",
+      "publishedAt": "2026-06-07",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "정하연",
+      "scope": "solo",
+      "source": "SBS Inkigayo",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    },
+    {
+      "youtubeId": "_Xzf53gzfnE",
+      "title": "정하연 〈Baby Flower〉 직캠 · MBC 음악중심",
+      "category": "performance",
+      "publishedAt": "2026-06-06",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "정하연",
+      "scope": "solo",
+      "source": "MBC 음악중심",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    },
+    {
+      "youtubeId": "Cqab3w_8SDg",
+      "title": "하연 생일 SIGNAL LIVE · 2026.08.01",
+      "category": "live",
+      "publishedAt": "2026-08-01",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "tripleS official",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    },
+    {
+      "youtubeId": "SMMBtvrV5po",
+      "title": "정하연 〈Q&A〉 직캠 · msnz 쇼케이스",
+      "category": "performance",
+      "publishedAt": "2025-11-26",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "zenith",
+      "scope": "solo",
+      "source": "하트",
+      "verified": true,
+      "note": "직접 연결한 공개 YouTube 영상"
+    }
+  ]
+}

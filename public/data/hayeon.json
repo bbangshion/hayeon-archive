@@ -1,0 +1,42 @@
+{
+  "site": {
+    "id": "hayeon-archive",
+    "title": "HAYEON ARCHIVE",
+    "member": "S19",
+    "author": "@bbangshion",
+    "description": {
+      "ko": "정하연의 장면과 기록을 모아둔 비공식 팬 아카이브",
+      "en": "An unofficial visual archive of Jeong HaYeon",
+      "ja": "チョン・ハヨンの非公式ファンアーカイブ"
+    },
+    "disclaimer": "Unofficial fan project; not affiliated with tripleS, MODHAUS, or other fan archives."
+  },
+  "member": {
+    "code": "S19",
+    "name": {
+      "ko": "정하연",
+      "en": "Jeong HaYeon",
+      "ja": "チョン・ハヨン"
+    },
+    "birthDate": "2007-08-01",
+    "revealed": "2023-12-23",
+    "color": "#52D9BB",
+    "units": [
+      "NXT",
+      "Alphie",
+      "zenith"
+    ]
+  },
+  "hero": {
+    "image": "images/hayeon-home.jpg",
+    "originalUnmodified": true,
+    "photographer": "미상 · 사용자 제공",
+    "date": null
+  },
+  "referenceLinks": [
+    "https://www.triples-official.jp/profile/",
+    "https://triples.fandom.com/wiki/Jeong_HaYeon",
+    "https://triplesfans.com/members/hayeon"
+  ],
+  "launchNote": "Profile and selected film/activity sources are seeded. Photo and Objekt bulk archives need a verified import."
+}

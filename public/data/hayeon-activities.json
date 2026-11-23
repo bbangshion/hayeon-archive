@@ -1,0 +1,126 @@
+{
+  "updatedAt": "2026-11-23",
+  "about": "Source-backed S19 records. Exact appearances not exhaustive.",
+  "activities": [
+    {
+      "id": "s19-reveal",
+      "date": "2023-12-23",
+      "kind": "milestone",
+      "title": {
+        "ko": "S19 정하연 공개",
+        "en": "Jeong HaYeon was introduced as S19.",
+        "ja": "S19 정하연 공개"
+      },
+      "description": {
+        "ko": "tripleS 19번째 멤버로 공개",
+        "en": "Jeong HaYeon was introduced as S19.",
+        "ja": "tripleS 19번째 멤버로 공개"
+      },
+      "source": "https://triples.fandom.com/wiki/Jeong_HaYeon",
+      "sourceName": "자료 링크",
+      "scope": "S19",
+      "s19": true,
+      "scheduled": false
+    },
+    {
+      "id": "nxt",
+      "date": "2023-12-23",
+      "kind": "release",
+      "title": {
+        "ko": "NXT 〈Just Do It〉 발매",
+        "en": "NXT — Just Do It",
+        "ja": "NXT 〈Just Do It〉 발매"
+      },
+      "description": {
+        "ko": "NXT 활동과 첫 음원",
+        "en": "NXT — Just Do It",
+        "ja": "NXT 활동과 첫 음원"
+      },
+      "source": "https://www.melon.com/album/detail.htm?albumId=11388823",
+      "sourceName": "자료 링크",
+      "scope": "NXT",
+      "s19": true,
+      "scheduled": false
+    },
+    {
+      "id": "assemble24",
+      "date": "2024-05-08",
+      "kind": "release",
+      "title": {
+        "ko": "tripleS 〈ASSEMBLE24〉 발매",
+        "en": "tripleS — ASSEMBLE24",
+        "ja": "tripleS 〈ASSEMBLE24〉 발매"
+      },
+      "description": {
+        "ko": "24인 완전체 앨범 활동",
+        "en": "tripleS — ASSEMBLE24",
+        "ja": "24인 완전체 앨범 활동"
+      },
+      "source": "https://triplesfans.com/members/hayeon",
+      "sourceName": "자료 링크",
+      "scope": "tripleS",
+      "s19": true,
+      "scheduled": false
+    },
+    {
+      "id": "assemble25",
+      "date": "2025-05-12",
+      "kind": "release",
+      "title": {
+        "ko": "tripleS 〈ASSEMBLE25〉 발매",
+        "en": "tripleS — ASSEMBLE25",
+        "ja": "tripleS 〈ASSEMBLE25〉 발매"
+      },
+      "description": {
+        "ko": "완전체 앨범 활동 · 깨어 (Are You Alive)",
+        "en": "tripleS — ASSEMBLE25",
+        "ja": "완전체 앨범 활동 · 깨어 (Are You Alive)"
+      },
+      "source": "https://triplesfans.com/members/hayeon",
+      "sourceName": "자료 링크",
+      "scope": "tripleS",
+      "s19": true,
+      "scheduled": false
+    },
+    {
+      "id": "msnz-zenith",
+      "date": "2025-11-24",
+      "kind": "unit",
+      "title": {
+        "ko": "msnz zenith 〈Q&A〉 발매",
+        "en": "msnz zenith — Q&A",
+        "ja": "msnz zenith 〈Q&A〉 발매"
+      },
+      "description": {
+        "ko": "정하연이 참여한 zenith 유닛의 음반 활동",
+        "en": "msnz zenith — Q&A",
+        "ja": "정하연이 참여한 zenith 유닛의 음반 활동"
+      },
+      "source": "https://www.koreatimes.co.kr/entertainment/k-pop/20251124/triples-returns-with-full-24-member-lineup-in-unit-driven-album-beyond-beauty",
+      "sourceName": "자료 링크",
+      "scope": "zenith",
+      "s19": true,
+      "scheduled": false
+    },
+    {
+      "id": "assemble26",
+      "date": "2026-06-01",
+      "kind": "release",
+      "title": {
+        "ko": "tripleS 〈ASSEMBLE26〉 활동",
+        "en": "tripleS — ASSEMBLE26",
+        "ja": "tripleS 〈ASSEMBLE26〉 활동"
+      },
+      "description": {
+        "ko": "완전체 앨범 · Baby Flower 활동",
+        "en": "tripleS — ASSEMBLE26",
+        "ja": "완전체 앨범 · Baby Flower 활동"
+      },
+      "source": "https://triplesfans.com/members/hayeon",
+      "sourceName": "자료 링크",
+      "scope": "tripleS",
+      "s19": true,
+      "scheduled": false
+    }
+  ]
+}

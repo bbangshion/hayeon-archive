@@ -1,0 +1,29 @@
+[
+  {
+    "id": "hayeon-cover-001",
+    "category": "photo",
+    "memberId": "S19",
+    "image": "images/hayeon-home.jpg",
+    "title": {
+      "ko": "정하연 · 커버 이미지",
+      "en": "HaYeon · Cover Portrait",
+      "ja": "ハヨン・カバーポートレート"
+    },
+    "album": {
+      "ko": "빵시온",
+      "en": "bbangshion",
+      "ja": "bbangshion"
+    },
+    "date": null,
+    "credit": {
+      "ko": "사용자 제공 · 원저작권 별도 확인",
+      "en": "User-provided · original rights unverified",
+      "ja": "ユーザー提供・原著作権は未確認"
+    },
+    "tags": [
+      "S19",
+      "정하연",
+      "HaYeon"
+    ]
+  }
+]
