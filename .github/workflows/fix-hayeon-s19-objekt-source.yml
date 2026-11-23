@@ -1,0 +1,98 @@
+name: HAYEON S19 - Fix WAV Source and Sync Objekts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hayeon-s19-source-repair
+  cancel-in-progress: false
+
+jobs:
+  repair-and-sync:
+    if: github.repository == 'bbangshion/hayeon-archive' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Checkout HAYEON repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Fix source owner in committed S19 converter
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/sync-wav-s19.mjs')
+          if not p.is_file():
+              raise SystemExit('STOP: scripts/sync-wav-s19.mjs is missing')
+          old = p.read_text(encoding='utf-8')
+          # Initial HAYEON template accidentally used bbanghayeon,
+          # while the real WAV ARCHIVE is under bbangshion.
+          new = old.replace('raw.githubusercontent.com/bbanghayeon/wav-archive/',
+                            'raw.githubusercontent.com/bbangshion/wav-archive/')
+          new = new.replace('bbanghayeon.github.io/wav-archive/',
+                            'bbangshion.github.io/wav-archive/')
+          # Never identify a S19 card using a S20 member alias.
+          new = new.replace('|SION|JEONGHAYEON|', '|JEONGHAYEON|')
+          if 'bbanghayeon' in new:
+              raise SystemExit('STOP: wrong source owner remains; inspect source manually')
+          required = (
+              'https://raw.githubusercontent.com/bbangshion/wav-archive/main/objekt-collection/data/',
+              'https://bbangshion.github.io/wav-archive/objekt-collection/',
+              'S19_HAYEON',
+          )
+          if not all(x in new for x in required):
+              raise SystemExit('STOP: expected converter structure is missing; no files changed')
+          if new != old:
+              p.write_text(new, encoding='utf-8')
+              print('Corrected WAV source owner and S19 match rule.')
+          else:
+              print('Correct source owner already set; continuing to sync.')
+          PY
+          node --check scripts/sync-wav-s19.mjs
+
+      - name: Verify S19 converter with fixtures
+        run: node scripts/sync-wav-s19.mjs --self-test
+
+      - name: Download real WAV ARCHIVE S19 snapshot
+        run: node scripts/sync-wav-s19.mjs
+
+      - name: Verify S19 records before commit
+        shell: bash
+        run: |
+          node scripts/audit-hayeon.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const obj = JSON.parse(fs.readFileSync('public/data/objekt.json','utf8'));
+          const cards = obj?.objekts;
+          if (!Array.isArray(cards) || cards.length === 0) throw Error('No S19 cards. Refusing empty overwrite.');
+          if (!cards.every(x => x.member === 'S19_HAYEON' && typeof x.id === 'string')) {
+            throw Error('Non-S19 card or invalid IDs detected. Refusing commit.');
+          }
+          const images = cards.filter(x => typeof x.imageUrl === 'string' && x.imageUrl.startsWith('https://')).length;
+          if (images < 1) throw Error('No valid image URLs. Refusing commit.');
+          console.log(`Validated ${cards.length} S19 cards (${images} with HTTPS images).`);
+          JS
+
+      - name: Commit corrected converter and validated S19 cards
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- scripts/sync-wav-s19.mjs public/data/objekt.json
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+          else
+            git commit -m 'fix: correct WAV source and sync HAYEON S19 Objekts'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
