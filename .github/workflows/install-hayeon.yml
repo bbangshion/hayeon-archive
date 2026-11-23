@@ -1,0 +1,57 @@
+name: Install HAYEON ARCHIVE
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack prebuilt HAYEON source
+        run: |
+          test -f HAYEON_SITE_PAYLOAD.zip
+          mkdir -p /tmp/hayeon-site
+          unzip -q HAYEON_SITE_PAYLOAD.zip -d /tmp/hayeon-site
+          test -f /tmp/hayeon-site/package.json
+          test -f /tmp/hayeon-site/public/images/hayeon-home.jpg
+          rsync -a --exclude='.github/' /tmp/hayeon-site/ ./
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate HAYEON content
+        run: |
+          node scripts/audit-hayeon.mjs
+          node scripts/sync-wav-s19.mjs --self-test
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build site
+        run: npm run build
+      - name: Commit source only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- src public scripts index.html package.json postcss.config.cjs tailwind.config.ts tsconfig.json vite.config.ts README.md
+          git rm -f -- HAYEON_SITE_PAYLOAD.zip
+          if git diff --cached --quiet; then
+            echo 'Already installed.'
+          else
+            git commit -m 'site: install HAYEON ARCHIVE S19'
+            git push origin HEAD:main
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: install
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
