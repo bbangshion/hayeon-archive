@@ -1,5 +1,5 @@
 :root { --af-accent: #52D9BB; }
-/* HAYEON / ARCHIVE FAMILY 01 (visual copy of YEONJI master) — shared editorial UI for SHION / YEONJI / CHAEWON.
+/* HAYEON / YEONJI MASTER FAMILY V2 — shared editorial UI for SHION / YEONJI / CHAEWON.
    Same components, same spacing and motion. Only --af-accent and portraits differ.
    Import this file LAST. This is a CSS overlay, NOT a reimplementation of features.
 */
@@ -94,11 +94,4 @@ body { background: var(--af-bg); color: var(--af-ink); font-family: Inter, Prete
 }
 @media (prefers-reduced-motion: reduce) {
   .shion-gallery-image img, .shion-film-poster img { transition: none !important; transform: none !important; }
-}
-
-/* Member identity: the common archive design never replaces S19 assets or data. */
-:root, html[data-theme="obsidian"] {
-  --af-accent: #52D9BB;
-  --theme-accent: #52D9BB;
-  --theme-accent-soft: rgba(82, 217, 187, .12);
 }
