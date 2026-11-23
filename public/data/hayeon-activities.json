@@ -20,7 +20,8 @@
       "sourceName": "자료 링크",
       "scope": "S19",
       "s19": true,
-      "scheduled": false
+      "scheduled": false,
+      "featured": true
     },
     {
       "id": "nxt",
@@ -60,7 +61,8 @@
       "sourceName": "자료 링크",
       "scope": "tripleS",
       "s19": true,
-      "scheduled": false
+      "scheduled": false,
+      "featured": true
     },
     {
       "id": "assemble25",
@@ -100,7 +102,8 @@
       "sourceName": "자료 링크",
       "scope": "zenith",
       "s19": true,
-      "scheduled": false
+      "scheduled": false,
+      "featured": true
     },
     {
       "id": "assemble26",
@@ -120,7 +123,8 @@
       "sourceName": "자료 링크",
       "scope": "tripleS",
       "s19": true,
-      "scheduled": false
+      "scheduled": false,
+      "featured": true
     }
   ]
 }

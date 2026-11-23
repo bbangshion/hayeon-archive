@@ -3,14 +3,17 @@ import { createPortal } from 'react-dom';
 import { useI18n } from '../i18n/I18nContext';
 import { clearRouteItem, getRouteItem } from '../lib/archiveRoute';
 import { RecentPhotoSources } from './RecentPhotoSources';
+import './hayeon-photo-v4.css';
 
 type LocalizedText = { ko: string; en?: string; ja?: string };
 type Photo = {
   id: string;
   image: string;
+  thumbnail: string | null;
   title: LocalizedText;
   album: LocalizedText;
   date: string | null;
+  year: string | null;
   credit: LocalizedText | null;
   source: string | null;
   tags: string[];
@@ -21,10 +24,10 @@ type ViewMode = 'date' | 'album';
 const BASE = import.meta.env.BASE_URL;
 const PAGE_SIZE = 36;
 const FALLBACK: Photo = {
-  id: 'airport-photo', image: `${BASE}images/hayeon-home.jpg`,
-  title: { ko: '공항에서', en: 'At the airport', ja: '空港にて' },
+  id: 'hayeon-cover-001', image: `${BASE}images/hayeon-home.jpg`, thumbnail: null,
+  title: { ko: '정하연 · 커버 이미지', en: 'HaYeon · Archive cover', ja: 'ハヨン・カバー写真' },
   album: { ko: '일상', en: 'Daily life', ja: '日常' },
-  date: null,
+  date: null, year: null,
   credit: { ko: '사용자 제공 사진', en: 'User-provided photo', ja: 'ユーザー提供写真' },
   source: null, tags: [],
 };
@@ -67,6 +70,7 @@ function readPhotos(payload: unknown): Photo[] {
   for (const raw of items) {
     if (!isRecord(raw)) continue;
     if (typeof raw.category === 'string' && raw.category.toLowerCase() !== 'photo') continue;
+    if (raw.memberId && raw.memberId !== 'S19') continue;
     if (typeof raw.type === 'string' && raw.type.toLowerCase() !== 'photo') continue;
     const id = typeof raw.id === 'string' ? raw.id.trim() : '';
     const image = imageURL(raw.image);
@@ -74,10 +78,11 @@ function readPhotos(payload: unknown): Photo[] {
     if (/(^|\/)objekt(?:-collection)?\//i.test(image)) continue;
     ids.add(id);
     results.push({
-      id, image,
+      id, image, thumbnail: imageURL(raw.thumbnail),
       title: localized(raw.title, '정하연'),
       album: localized(raw.album, '사진'),
       date: validDate(raw.date),
+      year: validDate(raw.date)?.slice(0, 4) ?? (typeof (raw.sourceYear ?? raw.year) === 'string' && /^20\d\d$/.test(String(raw.sourceYear ?? raw.year)) ? String(raw.sourceYear ?? raw.year) : null),
       credit: raw.credit ? localized(raw.credit, '') : null,
       source: sourceURL(raw.sourceUrl ?? raw.source),
       tags: Array.isArray(raw.tags) ? raw.tags.filter((tag): tag is string => typeof tag === 'string').slice(0, 20) : [],
@@ -85,17 +90,12 @@ function readPhotos(payload: unknown): Photo[] {
   }
   return results;
 }
-/** The displayed curator label is not a replacement for the original photo source. */
-function isSNSArchiveAlbum(album: LocalizedText): boolean {
-  return [album.ko, album.en, album.ja].some((name) =>
-    typeof name === 'string' && /^(?:SNS\s*아카이브|SNS\s*Archive|SNS\s*アーカイブ)$/i.test(name.trim())
-  );
-}
-function dateKey(photo: Photo): string { return photo.date?.slice(0, 7) ?? 'unknown'; }
+/* Keep real source categories for filtering; photo tiles use one archive signature. */
+function dateKey(photo: Photo): string { return photo.date ?? (photo.year ? `${photo.year}-unknown` : 'unknown'); }
 function comparePhotos(a: Photo, b: Photo, order: SortOrder): number {
-  if (a.date && !b.date) return -1;
-  if (b.date && !a.date) return 1;
-  const diff = (a.date ?? '').localeCompare(b.date ?? '');
+  const aKey = a.date ?? (a.year ? `${a.year}-00-00` : '');
+  const bKey = b.date ?? (b.year ? `${b.year}-00-00` : '');
+  const diff = aKey.localeCompare(bKey);
   return (order === 'newest' ? -diff : diff) || a.id.localeCompare(b.id);
 }
 /** Lightweight previews for official X images; open the original in the viewer. */
@@ -104,10 +104,9 @@ function thumbnailURL(image: string): string {
   try { const url = new URL(image); url.searchParams.set('name', 'small'); return url.toString(); }
   catch { return image; }
 }
-function PhotoTile({ photo, title, album, onClick }: {
+function PhotoTile({ photo, title, onClick }: {
   photo: Photo;
   title: string;
-  album: string;
   onClick: () => void;
 }) {
   const { t } = useI18n();
@@ -116,9 +115,9 @@ function PhotoTile({ photo, title, album, onClick }: {
   return <button type="button" className="shion-gallery-tile" onClick={onClick} aria-label={`${title} — ${t('사진 확대')}`}>
     <span className="shion-gallery-image">
       {broken ? <span className="shion-gallery-image-error">{t('이미지를 표시할 수 없습니다')}</span>
-        : <img src={thumbnailURL(photo.image)} alt={title} loading="lazy" decoding="async" onError={() => setBroken(true)}/>}
+        : <img src={photo.thumbnail ?? thumbnailURL(photo.image)} alt={title} loading="lazy" decoding="async" onError={() => setBroken(true)}/>}
     </span>
-    <span className="shion-gallery-meta"><strong>{title}</strong><span>{album}</span></span>
+    <span className="shion-gallery-meta"><strong>{title}</strong><span>빵시온</span></span>
   </button>;
 }
 // Accept legacy props during staged GitHub uploads; photo data never uses Objekt.
@@ -140,8 +139,8 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
   const closeButton = useRef<HTMLButtonElement>(null);
   const swipeStart = useRef<number | null>(null);
   const deferred = useDeferredValue(query.trim().toLocaleLowerCase());
-  const text = (label: LocalizedText): string => label[language] || t(label.ko);
-  const albumText = (label: LocalizedText): string => isSNSArchiveAlbum(label) ? '빵시온' : text(label);
+  const text = (label: LocalizedText): string => (label[language] || t(label.ko)).replace(/빵시온/g, '빵시온');
+  const albumText = (label: LocalizedText): string => text(label);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -162,8 +161,20 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
     }
   }, [isLoading, photos]);
 
-  const years = useMemo(() => [...new Set(photos.flatMap((photo) => photo.date ? [photo.date.slice(0, 4)] : []))].sort().reverse(), [photos]);
-  const months = useMemo(() => [...new Set(photos.flatMap((photo) => photo.date && (year === 'all' || photo.date.startsWith(year)) ? [photo.date.slice(5, 7)] : []))].sort(), [photos, year]);
+  const years = useMemo(() => [...new Set(photos.flatMap((photo) => photo.year ? [photo.year] : []))].sort().reverse(), [photos]);
+
+  // HAYEON_PHOTO_V4 — actual indexed photos only; external reference links are not counted.
+  const yearCounts = useMemo(() => {
+    const result: Record<string, number> = {};
+    for (const photo of photos) if (photo.year) {
+      const y = photo.year;
+      result[y] = (result[y] ?? 0) + 1;
+    }
+    return result;
+  }, [photos]);
+  const latestRegisteredDate = useMemo(() => photos.reduce<string | null>((latest, photo) =>
+    photo.date && (!latest || photo.date > latest) ? photo.date : latest, null), [photos]);
+  const months = useMemo(() => [...new Set(photos.flatMap((photo) => photo.date && (year === 'all' || photo.year === year) ? [photo.date.slice(5, 7)] : []))].sort(), [photos, year]);
   const albums = useMemo(() => [...new Set(photos.map((photo) => photo.album.ko))].sort((a, b) => a.localeCompare(b, 'ko')), [photos]);
   const albumNames = useMemo(() => new Map(photos.map((photo) => [photo.album.ko, albumText(photo.album)])), [photos, language]);
   const recentCutoff = useMemo(() => {
@@ -172,11 +183,11 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
   }, []);
   const filtered = useMemo(() => photos.filter((photo) =>
     (!recentOnly || (photo.date !== null && photo.date >= recentCutoff)) &&
-    (year === 'all' || photo.date?.startsWith(year)) &&
+    (year === 'all' || photo.year === year) &&
     (month === 'all' || photo.date?.slice(5, 7) === month) &&
     (album === 'all' || photo.album.ko === album) &&
     (!deferred || [photo.title.ko, photo.title.en, photo.title.ja, photo.album.ko, photo.album.en,
-      photo.album.ja, isSNSArchiveAlbum(photo.album) ? '빵시온' : '', photo.date, photo.credit?.ko, ...photo.tags]
+      photo.album.ja, '빵시온', '@bbangshion', photo.date, photo.year, photo.credit?.ko, ...photo.tags]
       .filter(Boolean).join(' ').toLocaleLowerCase().includes(deferred))
   ).sort((a, b) => comparePhotos(a, b, sort)), [photos, year, month, album, deferred, sort, recentOnly, recentCutoff]);
   const visible = filtered.slice(0, limit);
@@ -222,22 +233,53 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prevOverflow; previous?.focus(); };
   }, [selectedId, filtered]);
   const reset = () => { setYear('all'); setMonth('all'); setAlbum('all'); setQuery(''); setSort('newest'); setRecentOnly(false); };
-  const photoDate = (date: string | null) => date ?? t('날짜 미상');
+  const photoDate = (date: string | null, year: string | null) => date ?? (year ? `${year} · ${t('날짜 미상')}` : t('날짜 미상'));
   const monthLabel = (monthValue: string) => new Intl.DateTimeFormat(language === 'en' ? 'en-US' : language === 'ja' ? 'ja-JP' : 'ko-KR', { month: 'long' }).format(new Date(2020, Number(monthValue) - 1, 1));
   const groupLabel = (key: string) => mode === 'album'
     ? (albumNames.get(key) ?? key)
-    : (key === 'unknown' ? t('날짜 미상') : `${key.replace('-', '.')}`);
+    : (key === 'unknown' ? t('날짜 미상') : key.endsWith('-unknown') ? `${key.slice(0, 4)} · ${t('날짜 미상')}` : key.replace(/-/g, '.')); 
 
   return <section className="shion-photos shion-photo-v2 animate-appear" aria-labelledby="photos-heading">
     <header className="shion-page-heading">
       <span className="shion-page-kicker">PHOTO ARCHIVE</span>
       <h1 id="photos-heading">{t('사진')}</h1>
-      <p>{t('정하연 사진을 날짜와 앨범으로 모아봤어요')}</p>
+      <p>{t('정하연의 사진을 날짜와 앨범별로 정리했습니다')}</p>
       <p className="shion-source-note">{language === 'en' ? 'Curated by @bbangshion' : language === 'ja' ? 'アーカイブ編集 · @bbangshion' : '아카이브 정리 · @bbangshion'}</p>
     </header>
+    {/* HAYEON_GALLERY_LINK_V2 */}
+    <a href={`${import.meta.env.BASE_URL}gallery/index.html`} style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,boxSizing:'border-box',width:'100%',padding:'14px 16px',margin:'0 0 20px',minHeight:62,border:'1px solid #6578b5',background:'rgba(89,116,255,0.09)',borderRadius:6,color:'inherit',textDecoration:'none'}}>
+      <span style={{display:'grid',gap:5}}><span style={{fontSize:10,letterSpacing:'0.16em',color:'inherit'}}>HAYEON GALLERY</span><strong style={{fontSize:16,fontWeight:600}}>{language === 'en' ? 'Photo gallery' : language === 'ja' ? '写真ギャラリー' : '종합 사진 전시관'}</strong></span>
+      <span aria-hidden="true" style={{fontSize:22}}>↗</span>
+    </a>
     <RecentPhotoSources />
+    {/* HAYEON_PHOTO_V4 — date chips reflect only real gallery entries */}
+    <div className="hayeon-photo-index" aria-label={language === 'en' ? 'Photo year index' : language === 'ja' ? '写真の年別索引' : '사진 연도별 바로가기'}>
+      <div className="hayeon-photo-index-heading">
+        <span>HAYEON PHOTO INDEX</span>
+        <p>{latestRegisteredDate
+          ? (language === 'en' ? `Latest archived date ${latestRegisteredDate.replace(/-/g, '.')}`
+            : language === 'ja' ? `最新登録日 ${latestRegisteredDate.replace(/-/g, '.')}`
+            : `최근 등록 사진 날짜 ${latestRegisteredDate.replace(/-/g, '.')}`)
+          : (language === 'en' ? 'No dated photos registered yet'
+            : language === 'ja' ? '日付付き写真は未登録'
+            : '날짜가 확인된 사진이 아직 없습니다')}</p>
+      </div>
+      <div className="hayeon-photo-years" role="group" aria-label={language === 'en' ? 'Year' : '연도'}>
+        <button type="button" className={year === 'all' && !recentOnly ? 'is-active' : ''}
+          aria-pressed={year === 'all' && !recentOnly} onClick={() => { setYear('all'); setMonth('all'); setRecentOnly(false); }}>
+          ALL <small>{formatNumber(photos.length)}</small></button>
+        {['2026', '2025', '2024', '2023'].map((y) =>
+          <button type="button" key={y} disabled={!yearCounts[y]} className={year === y && !recentOnly ? 'is-active' : ''}
+            aria-pressed={year === y && !recentOnly} onClick={() => { setYear(y); setMonth('all'); setRecentOnly(false); }}>
+            {y} <small>{formatNumber(yearCounts[y] ?? 0)}</small></button>)}
+      </div>
+      <p className="hayeon-photo-index-hint">{language === 'en'
+        ? 'Counts are registered images, not the number of photos listed in external posts'
+        : language === 'ja' ? '件数は登録済み画像のみを集計し、外部投稿の総数は含みません'
+        : '등록된 사진만 집계하며 외부 게시물의 전체 사진 수는 포함하지 않습니다'}</p>
+    </div>
     <div className="shion-photo-controls">
-      <div className="shion-photo-view-tabs" role="group" aria-label={t('사진 보기 방식')}>
+      <div className="shion-photo-view-tabs" role="group" aria-label={t('사진 보기방식')}>
         <button type="button" className={mode === 'date' ? 'is-active' : ''} aria-pressed={mode === 'date'} onClick={() => setMode('date')}>{t('날짜별')}</button>
         <button type="button" className={mode === 'album' ? 'is-active' : ''} aria-pressed={mode === 'album'} onClick={() => setMode('album')}>{t('앨범별')}</button>
       </div>
@@ -255,7 +297,7 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
           <option value="all">{t('모든 앨범')}</option>{albums.map((name) => <option value={name} key={name}>{albumNames.get(name) ?? name}</option>)}
         </select></label>
         <label><span className="sr-only">{t('정렬')}</span><select value={sort} onChange={(e) => setSort(e.target.value as SortOrder)}>
-          <option value="newest">{t('최신순')}</option><option value="oldest">{t('오래된순')}</option>
+          <option value="newest">{t('최신순')}</option><option value="oldest">{t('오래된 순')}</option>
         </select></label>
       </div>
     </div>
@@ -269,17 +311,17 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
     </div>
     <>
     {isLoading ? <div role="status" className="shion-photo-empty">{t('사진을 불러오는 중')}</div> : filtered.length === 0 ?
-      <div className="shion-photo-empty">{t('조건에 맞는 사진이 없습니다')}</div> : <>
+      <div className="shion-photo-empty">{year === '2026' && !yearCounts['2026'] ? (language === 'en' ? 'No verified 2026 photos are registered yet' : language === 'ja' ? '2026年の確認済み写真はまだ登録されていません' : '2026년 등록 사진이 아직 없습니다') : t('조건에 맞는 사진이 없습니다')}</div> : <>
         {groups.map(([key, list]) => <section className="shion-photo-group" key={`${mode}-${key}`} aria-label={groupLabel(key)}>
           <div className="shion-photo-group-head"><h2>{groupLabel(key)}</h2><span>{formatNumber(list.length)} {t('장')}</span></div>
           <div className="shion-photo-grid">{list.map((photo) =>
-            <PhotoTile key={photo.id} photo={photo} title={text(photo.title)} album={albumText(photo.album)} onClick={() => setSelectedId(photo.id)}/>)}</div>
+            <PhotoTile key={photo.id} photo={photo} title={text(photo.title)} onClick={() => setSelectedId(photo.id)}/>)}</div>
         </section>)}
         {limit < filtered.length && <button className="shion-photo-more" type="button" onClick={() => setLimit((n) => n + PAGE_SIZE)}>{t('더 보기')}</button>}
       </>}
     </>
     {loadError && <p className="shion-source-note" role="status">{t('사진 목록을 불러오지 못해 기본 사진을 표시합니다')}</p>}
-    <p className="shion-source-note">{t('사진은 출처가 확인된 자료를 기준으로 등록합니다')}</p>
+    <p className="shion-source-note">{t('출처가 확인된 사진만 등록합니다')}</p>
     {selected && createPortal(<div role="dialog" aria-modal="true" aria-label={`${text(selected.title)} — ${t('사진 확대')}`}
       className="shion-lightbox" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="shion-lightbox-top"><span>{formatNumber(currentIndex + 1)} / {formatNumber(filtered.length)}</span>
@@ -293,8 +335,8 @@ export function PhotoArchive(_legacyProps?: { objekts?: unknown[]; loading?: boo
         <button className="shion-lightbox-step" type="button" onClick={() => step(1)} aria-label={t('다음 사진')}>›</button>
       </div>
       <div className="shion-lightbox-caption shion-lightbox-caption-v2"><div><strong>{text(selected.title)}</strong>
-        <span>{albumText(selected.album)} · {photoDate(selected.date)}</span>
-        {selected.credit && <span>{selected.id.startsWith('fandom-s19-') ? text(selected.credit) : `${t('출처')}: ${text(selected.credit)}`}</span>}</div>
+        <span>{albumText(selected.album)} · {photoDate(selected.date, selected.year)}</span>
+        {selected.credit && <span>{selected.id.startsWith('fandom-s12-') ? text(selected.credit) : `${t('출처')}: ${text(selected.credit)}`}</span>}</div>
         {selected.source && <a href={selected.source} target="_blank" rel="noopener noreferrer">{t('원본 게시물')}</a>}
       </div>
     </div>, document.body)}

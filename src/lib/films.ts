@@ -1,28 +1,34 @@
+/** HAYEON FILM — member-only YouTube video catalog adapter.
+ * The API intentionally discards items that do not explicitly contain S19.
+ */
 export type FilmCategory = 'signal' | 'music' | 'performance' | 'live' | 'other';
 export type FilmScope = 'solo' | 'unit' | 'group';
-
+export type FilmPublisher = 'official' | 'broadcast' | 'fan';
+export type FilmKind = 'mv' | 'fancam' | 'dance' | 'signal' | 'live' | 'behind' | 'stage' | 'other';
 export interface Film {
   id: string;
-  title: string;
   youtubeId: string;
+  title: string;
   category: FilmCategory;
   publishedAt: string | null;
   group: string;
   note: string;
   source: string;
+  song: string;
   verified: boolean;
   scope: FilmScope;
+  publisher: FilmPublisher;
+  kind: FilmKind;
 }
-
 const CATEGORY_MAP: Record<string, FilmCategory> = {
   signal: 'signal', sssignal: 'signal', secretbase: 'signal', '시그널': 'signal',
   mv: 'music', music: 'music', '뮤직비디오': 'music', visual: 'music',
   performance: 'performance', fancam: 'performance', dance: 'performance', '직캠': 'performance',
-  live: 'live', '라이브': 'live', other: 'other', reveal: 'other', teaser: 'other',
+  live: 'live', '라이브': 'live', behind: 'other', '비하인드': 'other', other: 'other', reveal: 'other', teaser: 'other',
 };
+const KIND_SET = new Set<FilmKind>(['mv','fancam','dance','signal','live','behind','stage','other']);
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const asText = (v: unknown): string => typeof v === 'string' ? v.trim() : '';
-
 function findVideoId(value: unknown): string {
   const input = asText(value);
   if (/^[\w-]{11}$/.test(input)) return input;
@@ -43,7 +49,7 @@ function hasS19(row: Record<string, unknown>): boolean {
   const list = Array.isArray(possible) ? possible : [possible];
   return list.some((value) => {
     const s = (isObject(value) ? asText(value.id ?? value.name ?? value.memberId) : asText(value)).toLowerCase().replace(/[\s._-]/g, '');
-    return ['s19','s19hayeon','hayeon','jeonghayeon','junghayeon','정하연','하연'].includes(s);
+    return ['s12','s12hayeon','hayeon','kwakhayeon','정하연','하연'].includes(s);
   });
 }
 function validDate(value: unknown): string | null {
@@ -64,14 +70,20 @@ export function normalizeFilms(input: unknown): Film[] {
     const category = CATEGORY_MAP[asText(v.category ?? v.type).toLowerCase()] ?? 'other';
     const scopeCandidate = asText(v.scope);
     const scope: FilmScope = scopeCandidate === 'unit' || scopeCandidate === 'group' ? scopeCandidate : 'solo';
+    const publisherValue = asText(v.publisher);
+    const channelName = asText(v.source ?? v.channel);
+    const publisher: FilmPublisher = publisherValue === 'broadcast' || publisherValue === 'fan' || publisherValue === 'official' ? publisherValue : v.sourceKind === 'broadcaster-name' || /KBS|MBC|SBS|Mnet|THE K-POP|Studio CHOOM/i.test(channelName) ? 'broadcast' : /tripleS|Modhaus|official|COSMOS/i.test(channelName) ? 'official' : 'fan';
+    const rawKind = asText(v.kind ?? v.subCategory).toLowerCase() as FilmKind;
+    const kind: FilmKind = KIND_SET.has(rawKind) ? rawKind : (/직캠|fancam|focus\s*cam|facecam|입덕직캠/i.test(title) ? 'fancam' : /\bsignal\b|시그널/i.test(title) ? 'signal' : /비하인드|\bbehind\b/i.test(title) ? 'behind' : category === 'music' ? 'mv' : category === 'signal' ? 'signal' : category === 'performance' ? 'stage' : category === 'live' ? 'live' : 'other');
     const film: Film = {
-      id, youtubeId: id, title, category,
+      id, youtubeId:id, title, category,
       publishedAt: validDate(v.publishedAt ?? v.date),
       group: asText(v.group ?? v.dimension).slice(0,70) || 'tripleS',
       note: asText(v.note ?? v.description).slice(0,160),
-      source: asText(v.source ?? v.channel).slice(0,90) || '공식 영상 링크',
+      source: asText(v.source ?? v.channel).slice(0,90) || 'YouTube',
+      song: asText(v.song ?? v.track).slice(0,90),
       verified: v.verified === true,
-      scope,
+      scope, publisher, kind,
     };
     const prev = seen.get(id);
     if (!prev || (!prev.verified && film.verified)) seen.set(id, film);
@@ -81,7 +93,6 @@ export function normalizeFilms(input: unknown): Film[] {
 export const filmThumbnail = (id: string): string => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 export const filmYoutubeUrl = (id: string): string => `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
 export const filmEmbedUrl = (id: string): string => `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0`;
-export function readableFilmDate(date: string | null): string {
-  return date ? date.replace(/-/g, '.') : '날짜 미등록';
-}
+export function readableFilmDate(date: string | null): string { return date ? date.replace(/-/g, '.') : '날짜 미등록'; }
 export const filmScopeLabel = (scope: FilmScope): string => ({solo:'개인',unit:'유닛',group:'완전체'}[scope]);
+export const filmPublisherLabel = (publisher: FilmPublisher): string => ({official:'tripleS 공식',broadcast:'방송사',fan:'팬 촬영'}[publisher]);

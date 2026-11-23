@@ -12,7 +12,7 @@ import { ArchiveErrorBoundary } from './components/ArchiveErrorBoundary';
 import ScrollReveal from './components/ScrollReveal';
 // 1.8: Do not include every archive screen in the initial HOME bundle.
 // Modules are loaded only when their menu is opened; the data and UX remain unchanged.
-const ShionFilm = lazy(() => import('./components/ShionFilm'));
+const ShionFilm = lazy(() => import('./components/HayeonFilm'));
 const Collection = lazy(() => import('./components/Collection').then((module) => ({ default: module.Collection })));
 const TournamentArena = lazy(() => import('./components/TournamentArena').then((module) => ({ default: module.TournamentArena })));
 const ProfilePage = lazy(() => import('./components/ProfilePage').then((module) => ({ default: module.ProfilePage })));
