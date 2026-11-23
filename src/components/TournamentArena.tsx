@@ -43,7 +43,7 @@ const COPIES: Record<'ko' | 'en' | 'ja', Copy> = {
     copyFailed: '복사할 수 없습니다. 다시 시도해 주세요', shareFailed: '공유할 수 없습니다', saved: '결과 이미지를 저장했어요',
     reset: '설정으로', replay: '다시 하기', favorite: '즐겨찾기 추가', unfavorite: '즐겨찾기 해제',
     preview: '미리보기 카드로 진행 중입니다', editThird: '3·4위 다시 선택', progress: '진행도',
-    match: (n) => `${n}번째 대결`, round: (n) => `${n}강`, resultHeader: '정하연 오브젝트 월드컵', imageBlocked: '카드 원본 이미지가 일부 준비되지 않아 사진 4장이 포함된 PNG를 만들 수 없어요. GitHub Actions의 World Cup photo cache 로그를 확인해 주세요.', imageSaving: '카드 이미지로 PNG를 만드는 중…', imageOpen: '사진 크게 열기', imageClose: '닫기', imagePreview: '결과 사진 미리보기',
+    match: (n) => `${n}번째 대결`, round: (n) => `${n}강`, resultHeader: '정하연 오브젝트 월드컵', imageBlocked: '원본 이미지를 불러오지 못한 자리는 대체 표시됩니다. PNG 저장·공유는 가능합니다.', imageSaving: '카드 이미지로 PNG를 만드는 중…', imageOpen: '사진 크게 열기', imageClose: '닫기', imagePreview: '결과 사진 미리보기',
     shareFileFallback: '이 브라우저는 사진 파일 직접 공유를 지원하지 않아요. PNG를 저장한 다음 갤러리에서 공유해 주세요.',
     imageDownloadHint: 'PNG 다운로드를 요청했어요. 저장이 안 되면 아래 사진을 길게 눌러 저장하거나 사진 크게 열기를 선택해 주세요.', shared: '결과 사진을 공유했어요',
   },
@@ -58,7 +58,7 @@ const COPIES: Record<'ko' | 'en' | 'ja', Copy> = {
     copyFailed: 'Could not copy the ranking', shareFailed: 'Could not share the results', saved: 'Result image saved',
     reset: 'Setup', replay: 'Play again', favorite: 'Add favorite', unfavorite: 'Remove favorite',
     preview: 'Using preview cards', editThird: 'Change third place', progress: 'Progress',
-    match: (n) => `Match ${n}`, round: (n) => `Round of ${n}`, resultHeader: 'HaYeon Objekt World Cup', imageBlocked: 'Some card images could not be prepared for PNG export. Please check the World Cup photo cache step in GitHub Actions.', imageSaving: 'Preparing your photo PNG…', imageOpen: 'Open full image', imageClose: 'Close', imagePreview: 'Result photo preview',
+    match: (n) => `Match ${n}`, round: (n) => `Round of ${n}`, resultHeader: 'HaYeon Objekt World Cup', imageBlocked: 'Unavailable photos use labeled placeholders. You can still save and share the PNG.', imageSaving: 'Preparing your photo PNG…', imageOpen: 'Open full image', imageClose: 'Close', imagePreview: 'Result photo preview',
     shareFileFallback: 'This browser cannot share image files directly. Save the PNG and share it from your photo gallery.',
     imageDownloadHint: 'PNG download requested. If it does not save, long-press the preview image or open it full-size.', shared: 'Image shared',
   },
@@ -73,7 +73,7 @@ const COPIES: Record<'ko' | 'en' | 'ja', Copy> = {
     copyFailed: 'コピーできませんでした', shareFailed: '共有できませんでした', saved: '結果画像を保存しました',
     reset: '設定', replay: 'もう一度', favorite: 'お気に入りに追加', unfavorite: 'お気に入りを解除',
     preview: 'プレビューカードを使用中', editThird: '3位決定戦をやり直す', progress: '進行状況',
-    match: (n) => `第${n}対戦`, round: (n) => `${n}枚対戦`, resultHeader: 'ハヨンObjektワールドカップ', imageBlocked: '一部のカード画像をPNG用に準備できませんでした。GitHub ActionsのWorld Cup photo cacheを確認してください。', imageSaving: '写真入りPNGを作成しています…', imageOpen: '画像を開く', imageClose: '閉じる', imagePreview: '結果画像プレビュー',
+    match: (n) => `第${n}対戦`, round: (n) => `${n}枚対戦`, resultHeader: 'ハヨンObjektワールドカップ', imageBlocked: '画像を読み込めなかった場所には代替表示を使います。PNGの保存・共有は可能です。', imageSaving: '写真入りPNGを作成しています…', imageOpen: '画像を開く', imageClose: '閉じる', imagePreview: '結果画像プレビュー',
     shareFileFallback: 'このブラウザは画像ファイルの直接共有に非対応です。PNGを保存してギャラリーから共有してください。',
     imageDownloadHint: 'PNGのダウンロードを開始しました。保存されない場合は画像を長押しするか、大きく開いてください。', shared: '結果画像を共有しました',
   },
@@ -160,10 +160,11 @@ export function TournamentArena({ items, isDemo, favorites, onToggleFavorite }: 
       try {
         const output = await renderWorldCupPoster(ranking.map((item) => ({ item })), size);
         if (abandoned) return;
-        if (!output.blob || output.missingImages !== 0) {
+        if (!output.blob) {
           setPosterError(copy.imageBlocked);
           return;
         }
+        if (output.missingImages > 0) setPosterError(`${output.missingImages} / 4 · ${copy.imageBlocked}`);
         objectUrl = URL.createObjectURL(output.blob);
         setPoster({ blob: output.blob, url: objectUrl });
       } catch {

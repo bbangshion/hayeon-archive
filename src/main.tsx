@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import './hayeon-detail-v3.css';
 import './archive-family.css';
 
 const root = document.getElementById('root');

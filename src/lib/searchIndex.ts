@@ -61,11 +61,14 @@ export function indexPhotos(payload: unknown): SearchEntry[] {
       album.ko = '빵시온'; album.en = 'bbangshion'; album.ja = '빵시온';
     }
     const date = /^\d{4}-\d\d-\d\d$/.test(rawText(row.date)) ? rawText(row.date) : null;
+    // Fandom files often have a verified YEAR marker without a precise photo date.
+    const yearMarker = rawText(row.year);
+    const photoYear = date?.slice(0,4) || (/^20\d{2}$/.test(yearMarker) ? yearMarker : null);
     const credit = langText(row.credit, '');
     const tags = Array.isArray(row.tags) ? row.tags.filter((x): x is string => typeof x === 'string').slice(0, 20) : [];
     results.push({
       key: `photos:${id}`, id, category: 'photos', title,
-      description: album, image, date, year: date?.slice(0, 4) || null,
+      description: album, image, date, year: photoYear,
       searchText: normalizeSearchText([id, ...Object.values(title), ...Object.values(album), ...Object.values(credit), ...tags, date, '정하연', 'S19', 'HaYeon', 'ハヨン', 'チョン・ハヨン'].join(' ')),
     });
   }

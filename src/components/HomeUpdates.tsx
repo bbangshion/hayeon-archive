@@ -21,7 +21,9 @@ export default function HomeUpdates() {
     setLoading(true);
     void retryOverview().then((result) => { setData(result); setLoading(false); });
   };
-  const photos = data?.photos.slice(0, 6) ?? [];
+  // Only real 2026 year markers qualify. Never invent exact dates.
+  const photosFrom2026 = data?.photos.filter((item) => item.year === '2026') ?? [];
+  const photos = photosFrom2026.length ? photosFrom2026.slice(0, 6) : (data?.photos.slice(0, 6) ?? []);
   const films = data?.films.slice(0, 3) ?? [];
   const objektCount = catalogState.status === 'ready' ? formatNumber(catalogState.catalog.items.length) : '—';
   return <section className="shion-overview" aria-labelledby="shion-overview-title">
@@ -41,12 +43,12 @@ export default function HomeUpdates() {
         <span><Trans value="일부 목록을 불러오지 못했습니다" /></span>
         <button onClick={refresh} type="button"><Trans value="다시 시도" /></button></div> : null}
       {!loading && photos.length > 0 ? <div className="shion-overview-group">
-        <div className="shion-overview-heading"><div><span>PHOTO</span><h3><Trans value="최근 사진" /></h3></div>
+        <div className="shion-overview-heading"><div><span>PHOTO</span><h3>{photosFrom2026.length ? (language === 'ko' ? '2026년 사진' : language === 'ja' ? '2026年の写真' : '2026 photos') : t('최근 사진')}</h3></div>
           <button type="button" onClick={() => setScreen('photos')}><Trans value="모두 보기" /><ArrowIcon width={16} height={16}/></button></div>
         <div className="shion-overview-photo-grid">{photos.map((photo) => <button type="button" key={photo.key} className="shion-overview-photo"
           onClick={() => setScreen('photos', photo.id)} aria-label={searchLabel(photo.title, language)}>
           {photo.image && <img src={photo.image} alt="" loading="lazy" decoding="async" />}
-          <span>{searchLabel(photo.title, language)}<small>{photo.date || t('날짜 미등록')}</small></span>
+          <span>{searchLabel(photo.title, language)}<small>{photo.date || (photo.year ? `${photo.year} · ${language === 'ko' ? '촬영일 미확인' : language === 'ja' ? '撮影日未確認' : 'date unverified'}` : t('날짜 미등록'))}</small></span>
         </button>)}</div>
       </div> : null}
       {!loading && films.length > 0 ? <div className="shion-overview-group">

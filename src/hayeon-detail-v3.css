@@ -1,0 +1,48 @@
+/* HAYEON 2026 / Member archive visual polish. UI only. */
+:root { --hayeon-archive-accent:#52D9BB; --hayeon-archive-ink:#F4F5F5; --hayeon-archive-panel:#17191A; }
+.shion-profile .shion-page-heading { padding-bottom: clamp(12px, 3vw, 26px); }
+.shion-profile .shion-page-heading h1 { letter-spacing:-.065em; }
+.shion-profile .shion-profile-intro { align-items:start; }
+.shion-profile .shion-profile-portrait { max-width:580px; width:100%; }
+.shion-profile .shion-profile-portrait img { object-fit:cover; border:1px solid rgba(255,255,255,.10); border-radius:5px; }
+.shion-profile .shion-profile-info { align-self:center; min-width:0; }
+.shion-profile .shion-profile-info h2 { letter-spacing:-.06em; }
+.shion-profile .shion-fact-grid { margin-top:18px; }
+.shion-profile .shion-fact-grid > div { padding-block:15px; }
+.shion-profile .shion-fact-grid dt { letter-spacing:.045em; }
+.shion-profile .shion-official-link { border-bottom:1px solid rgba(82,217,187,.28); }
+.hayeon-profile-notes { margin-top:clamp(58px,7vw,98px); }
+.hayeon-profile-notes-head { display:flex; align-items:end; justify-content:space-between; gap:16px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.14); }
+.hayeon-profile-notes-head span { color:var(--hayeon-archive-accent); font-size:10px; font-weight:700; letter-spacing:.20em; }
+.hayeon-profile-notes-head h2 { margin-top:9px; color:var(--hayeon-archive-ink); font-size:clamp(25px,4vw,38px); font-weight:550; letter-spacing:-.055em; line-height:1.15; }
+.hayeon-profile-notes-head p { max-width:310px; color:#A8ADA9; font-size:12px; line-height:1.7; }
+.hayeon-profile-notes-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; }
+.hayeon-profile-notes-grid article { min-width:0; border-bottom:1px solid rgba(255,255,255,.11); padding:28px 24px 28px 0; }
+.hayeon-profile-notes-grid article+article { border-left:1px solid rgba(255,255,255,.11); padding-left:24px; }
+.hayeon-profile-notes-grid small { display:block; color:var(--hayeon-archive-accent); font-size:11px; font-weight:650; letter-spacing:.07em; }
+.hayeon-profile-notes-grid h3 { margin-top:10px; color:var(--hayeon-archive-ink); font-size:clamp(18px,2.5vw,24px); font-weight:600; letter-spacing:-.03em; }
+.hayeon-profile-notes-grid p { margin-top:12px; color:#AEB5B1; font-size:12px; line-height:1.9; }
+.hayeon-profile-notes-grid a { display:inline-flex; align-items:center; min-height:42px; margin-top:15px; color:#8DE9D4; font-size:12px; text-decoration:underline; text-underline-offset:4px; }
+.hayeon-profile-notes-grid a:focus-visible { outline:2px solid var(--hayeon-archive-accent); outline-offset:4px; }
+.shion-overview-photo > img { background:#1C1F1F; }
+.shion-overview-photo > span { min-height:55px; }
+.shion-overview-photo small { white-space:normal; line-height:1.5; }
+@media(max-width:760px) {
+  .shion-profile .shion-profile-portrait { margin-inline:auto; max-width:520px; }
+  .shion-profile .shion-profile-portrait img { max-height:470px; aspect-ratio:4/4.3; object-position:center 25%; }
+  .shion-profile .shion-profile-info { align-self:start; }
+  .hayeon-profile-notes-head { display:block; }
+  .hayeon-profile-notes-head p { margin-top:13px; }
+  .hayeon-profile-notes-grid { grid-template-columns:1fr; }
+  .hayeon-profile-notes-grid article { padding:22px 0; }
+  .hayeon-profile-notes-grid article+article { border-left:0; padding-left:0; }
+  .shion-overview-photo-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
+  .shion-overview-photo > span { padding:9px 7px; font-size:10px; min-height:62px; }
+}
+@media(max-width:360px) {
+  .shion-overview-photo-grid { gap:6px; }
+  .shion-profile .shion-profile-portrait img { max-height:405px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shion-profile .shion-profile-portrait, .hayeon-profile-notes-grid article { animation:none !important; }
+}

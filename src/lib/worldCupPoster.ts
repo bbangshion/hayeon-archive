@@ -117,7 +117,8 @@ function photo(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, box:
     ctx.font = '600 29px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = '#706B76';
-    ctx.fillText('HAYEON', box.x + box.w / 2, box.y + box.h / 2);
+    ctx.font = '600 16px system-ui, sans-serif';
+    ctx.fillText('IMAGE UNAVAILABLE', box.x + box.w / 2, box.y + box.h / 2);
   }
   ctx.restore();
   ctx.strokeStyle = border;

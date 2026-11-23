@@ -1,6 +1,7 @@
 import { useI18n } from '../i18n/I18nContext';
 import { ArrowIcon } from './Icons';
 import { ProfileHistory } from './ProfileHistory';
+import HayeonProfileNotes from './HayeonProfileNotes';
 
 type L = 'ko'|'en'|'ja';
 type LText = Record<L,string>;
@@ -59,6 +60,7 @@ export function ProfilePage() {
         <a className="shion-official-link" href="https://www.triples-official.jp/profile/" target="_blank" rel="noopener noreferrer">{t(text('공식 프로필','Official profile','公式プロフィール'))} <ArrowIcon width={16} height={16}/></a>
       </div>
     </div>
+    <HayeonProfileNotes/>
     <section id="profile-units" className="mt-20 scroll-mt-28 sm:mt-28">
       <span className="shion-page-kicker">DIMENSIONS</span>
       <h2 className="mt-2 mb-2 text-[clamp(27px,4vw,40px)] font-medium tracking-[-.04em]">{t(text('활동 유닛','Units','ユニット'))}</h2>
