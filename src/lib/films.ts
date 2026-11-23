@@ -49,7 +49,7 @@ function hasS19(row: Record<string, unknown>): boolean {
   const list = Array.isArray(possible) ? possible : [possible];
   return list.some((value) => {
     const s = (isObject(value) ? asText(value.id ?? value.name ?? value.memberId) : asText(value)).toLowerCase().replace(/[\s._-]/g, '');
-    return ['s12','s12hayeon','hayeon','kwakhayeon','정하연','하연'].includes(s);
+    return ['s19', 's19hayeon', 'hayeon', 'jeonghayeon', 'junghayeon', '정하연', '하연'].includes(s);
   });
 }
 function validDate(value: unknown): string | null {
