@@ -1,0 +1,192 @@
+name: HAYEON - Profile Recent Photos World Cup V3
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'preview = source validation only; apply = patch and publish after build'
+        type: choice
+        required: true
+        default: preview
+        options:
+          - preview
+          - apply
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: hayeon-v3-polish
+  cancel-in-progress: false
+jobs:
+  update:
+    if: github.ref == 'refs/heads/main' && github.repository == 'bbangshion/hayeon-archive'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      applied: ${{ steps.outcome.outputs.applied }}
+    steps:
+      - name: Checkout latest HAYEON site
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify and patch current source in runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/hayeon-ui-v3.py <<'PYCODE'
+          #!/usr/bin/env python3
+          """HAYEON ARCHIVE V3: targeted, idempotent UI-only/source-safe patch.
+          Must operate on fresh checkout, never copy another member's App/data files.
+          """
+          from pathlib import Path
+          import sys
+
+          ROOT = Path.cwd()
+
+          def update(filename: str, old: str, new: str):
+              path=ROOT/filename
+              if not path.is_file(): raise SystemExit(f'STOP: missing expected source {filename}')
+              raw=path.read_text(encoding='utf-8')
+              if new in raw:
+                  print('Already patched:',filename)
+                  return
+              if raw.count(old) != 1:
+                  raise SystemExit(f'STOP: expected source structure changed in {filename}; found {raw.count(old)} anchors, expected 1. No data files edited.')
+              path.write_text(raw.replace(old,new,1),encoding='utf-8')
+              print('Patched:',filename)
+
+          # Refuse to modify a wrong repository/member.
+          if not (ROOT/'public/data/hayeon.json').exists():
+              raise SystemExit('STOP: not HAYEON ARCHIVE')
+          if '"S19"' not in (ROOT/'public/data/hayeon.json').read_text(encoding='utf-8'):
+              raise SystemExit('STOP: S19 identity not found')
+
+          update('src/main.tsx', "import './index.css';", "import './index.css';\nimport './hayeon-detail-v3.css';")
+          update('src/lib/searchIndex.ts',
+              "    const date = /^\\d{4}-\\d\\d-\\d\\d$/.test(rawText(row.date)) ? rawText(row.date) : null;",
+              "    const date = /^\\d{4}-\\d\\d-\\d\\d$/.test(rawText(row.date)) ? rawText(row.date) : null;\n    // Fandom files often have a verified YEAR marker without a precise photo date.\n    const yearMarker = rawText(row.year);\n    const photoYear = date?.slice(0,4) || (/^20\\d{2}$/.test(yearMarker) ? yearMarker : null);")
+          update('src/lib/searchIndex.ts',
+              "image, date, year: date?.slice(0, 4) || null,",
+              "image, date, year: photoYear,")
+          update('src/components/HomeUpdates.tsx',
+              "  const photos = data?.photos.slice(0, 6) ?? [];",
+              "  // Only real 2026 year markers qualify. Never invent exact dates.\n  const photosFrom2026 = data?.photos.filter((item) => item.year === '2026') ?? [];\n  const photos = photosFrom2026.length ? photosFrom2026.slice(0, 6) : (data?.photos.slice(0, 6) ?? []);")
+          update('src/components/HomeUpdates.tsx',
+              '<span>PHOTO</span><h3><Trans value="최근 사진" /></h3>',
+              '<span>PHOTO</span><h3>{photosFrom2026.length ? (language === \'ko\' ? \'2026년 사진\' : language === \'ja\' ? \'2026年の写真\' : \'2026 photos\') : t(\'최근 사진\')}</h3>')
+          update('src/components/HomeUpdates.tsx',
+              "<small>{photo.date || t('날짜 미등록')}</small>",
+              "<small>{photo.date || (photo.year ? `${photo.year} · ${language === 'ko' ? '촬영일 미확인' : language === 'ja' ? '撮影日未確認' : 'date unverified'}` : t('날짜 미등록'))}</small>")
+          update('src/components/ProfilePage.tsx',
+              "import { ProfileHistory } from './ProfileHistory';",
+              "import { ProfileHistory } from './ProfileHistory';\nimport HayeonProfileNotes from './HayeonProfileNotes';")
+          update('src/components/ProfilePage.tsx',
+              '    <section id="profile-units"',
+              '    <HayeonProfileNotes/>\n    <section id="profile-units"')
+          update('src/components/TournamentArena.tsx',
+              "        if (!output.blob || output.missingImages !== 0) {",
+              "        if (!output.blob) {")
+          update('src/components/TournamentArena.tsx',
+              "        objectUrl = URL.createObjectURL(output.blob);",
+              "        if (output.missingImages > 0) setPosterError(`${output.missingImages} / 4 · ${copy.imageBlocked}`);\n        objectUrl = URL.createObjectURL(output.blob);")
+          update('src/components/TournamentArena.tsx',
+              "imageBlocked: '카드 원본 이미지가 일부 준비되지 않아 사진 4장이 포함된 PNG를 만들 수 없어요. GitHub Actions의 World Cup photo cache 로그를 확인해 주세요.'",
+              "imageBlocked: '원본 이미지를 불러오지 못한 자리는 대체 표시됩니다. PNG 저장·공유는 가능합니다.'")
+          update('src/components/TournamentArena.tsx',
+              "imageBlocked: 'Some card images could not be prepared for PNG export. Please check the World Cup photo cache step in GitHub Actions.'",
+              "imageBlocked: 'Unavailable photos use labeled placeholders. You can still save and share the PNG.'")
+          update('src/components/TournamentArena.tsx',
+              "imageBlocked: '一部のカード画像をPNG用に準備できませんでした。GitHub ActionsのWorld Cup photo cacheを確認してください。'",
+              "imageBlocked: '画像を読み込めなかった場所には代替表示を使います。PNGの保存・共有は可能です。'")
+          update('src/lib/worldCupPoster.ts',
+              "    ctx.fillText('HAYEON', box.x + box.w / 2, box.y + box.h / 2);",
+              "    ctx.font = '600 16px system-ui, sans-serif';\n    ctx.fillText('IMAGE UNAVAILABLE', box.x + box.w / 2, box.y + box.h / 2);")
+          css_path=ROOT/'src/hayeon-detail-v3.css'
+          if css_path.exists() and css_path.read_text(encoding='utf-8') != '/* HAYEON 2026 / Member archive visual polish. UI only. */\n:root { --hayeon-archive-accent:#52D9BB; --hayeon-archive-ink:#F4F5F5; --hayeon-archive-panel:#17191A; }\n.shion-profile .shion-page-heading { padding-bottom: clamp(12px, 3vw, 26px); }\n.shion-profile .shion-page-heading h1 { letter-spacing:-.065em; }\n.shion-profile .shion-profile-intro { align-items:start; }\n.shion-profile .shion-profile-portrait { max-width:580px; width:100%; }\n.shion-profile .shion-profile-portrait img { object-fit:cover; border:1px solid rgba(255,255,255,.10); border-radius:5px; }\n.shion-profile .shion-profile-info { align-self:center; min-width:0; }\n.shion-profile .shion-profile-info h2 { letter-spacing:-.06em; }\n.shion-profile .shion-fact-grid { margin-top:18px; }\n.shion-profile .shion-fact-grid > div { padding-block:15px; }\n.shion-profile .shion-fact-grid dt { letter-spacing:.045em; }\n.shion-profile .shion-official-link { border-bottom:1px solid rgba(82,217,187,.28); }\n.hayeon-profile-notes { margin-top:clamp(58px,7vw,98px); }\n.hayeon-profile-notes-head { display:flex; align-items:end; justify-content:space-between; gap:16px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.14); }\n.hayeon-profile-notes-head span { color:var(--hayeon-archive-accent); font-size:10px; font-weight:700; letter-spacing:.20em; }\n.hayeon-profile-notes-head h2 { margin-top:9px; color:var(--hayeon-archive-ink); font-size:clamp(25px,4vw,38px); font-weight:550; letter-spacing:-.055em; line-height:1.15; }\n.hayeon-profile-notes-head p { max-width:310px; color:#A8ADA9; font-size:12px; line-height:1.7; }\n.hayeon-profile-notes-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; }\n.hayeon-profile-notes-grid article { min-width:0; border-bottom:1px solid rgba(255,255,255,.11); padding:28px 24px 28px 0; }\n.hayeon-profile-notes-grid article+article { border-left:1px solid rgba(255,255,255,.11); padding-left:24px; }\n.hayeon-profile-notes-grid small { display:block; color:var(--hayeon-archive-accent); font-size:11px; font-weight:650; letter-spacing:.07em; }\n.hayeon-profile-notes-grid h3 { margin-top:10px; color:var(--hayeon-archive-ink); font-size:clamp(18px,2.5vw,24px); font-weight:600; letter-spacing:-.03em; }\n.hayeon-profile-notes-grid p { margin-top:12px; color:#AEB5B1; font-size:12px; line-height:1.9; }\n.hayeon-profile-notes-grid a { display:inline-flex; align-items:center; min-height:42px; margin-top:15px; color:#8DE9D4; font-size:12px; text-decoration:underline; text-underline-offset:4px; }\n.hayeon-profile-notes-grid a:focus-visible { outline:2px solid var(--hayeon-archive-accent); outline-offset:4px; }\n.shion-overview-photo > img { background:#1C1F1F; }\n.shion-overview-photo > span { min-height:55px; }\n.shion-overview-photo small { white-space:normal; line-height:1.5; }\n@media(max-width:760px) {\n  .shion-profile .shion-profile-portrait { margin-inline:auto; max-width:520px; }\n  .shion-profile .shion-profile-portrait img { max-height:470px; aspect-ratio:4/4.3; object-position:center 25%; }\n  .shion-profile .shion-profile-info { align-self:start; }\n  .hayeon-profile-notes-head { display:block; }\n  .hayeon-profile-notes-head p { margin-top:13px; }\n  .hayeon-profile-notes-grid { grid-template-columns:1fr; }\n  .hayeon-profile-notes-grid article { padding:22px 0; }\n  .hayeon-profile-notes-grid article+article { border-left:0; padding-left:0; }\n  .shion-overview-photo-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }\n  .shion-overview-photo > span { padding:9px 7px; font-size:10px; min-height:62px; }\n}\n@media(max-width:360px) {\n  .shion-overview-photo-grid { gap:6px; }\n  .shion-profile .shion-profile-portrait img { max-height:405px; }\n}\n@media(prefers-reduced-motion:reduce) {\n  .shion-profile .shion-profile-portrait, .hayeon-profile-notes-grid article { animation:none !important; }\n}\n':
+              raise SystemExit('STOP: unexpected existing custom CSS at src/hayeon-detail-v3.css')
+          css_path.write_text('/* HAYEON 2026 / Member archive visual polish. UI only. */\n:root { --hayeon-archive-accent:#52D9BB; --hayeon-archive-ink:#F4F5F5; --hayeon-archive-panel:#17191A; }\n.shion-profile .shion-page-heading { padding-bottom: clamp(12px, 3vw, 26px); }\n.shion-profile .shion-page-heading h1 { letter-spacing:-.065em; }\n.shion-profile .shion-profile-intro { align-items:start; }\n.shion-profile .shion-profile-portrait { max-width:580px; width:100%; }\n.shion-profile .shion-profile-portrait img { object-fit:cover; border:1px solid rgba(255,255,255,.10); border-radius:5px; }\n.shion-profile .shion-profile-info { align-self:center; min-width:0; }\n.shion-profile .shion-profile-info h2 { letter-spacing:-.06em; }\n.shion-profile .shion-fact-grid { margin-top:18px; }\n.shion-profile .shion-fact-grid > div { padding-block:15px; }\n.shion-profile .shion-fact-grid dt { letter-spacing:.045em; }\n.shion-profile .shion-official-link { border-bottom:1px solid rgba(82,217,187,.28); }\n.hayeon-profile-notes { margin-top:clamp(58px,7vw,98px); }\n.hayeon-profile-notes-head { display:flex; align-items:end; justify-content:space-between; gap:16px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.14); }\n.hayeon-profile-notes-head span { color:var(--hayeon-archive-accent); font-size:10px; font-weight:700; letter-spacing:.20em; }\n.hayeon-profile-notes-head h2 { margin-top:9px; color:var(--hayeon-archive-ink); font-size:clamp(25px,4vw,38px); font-weight:550; letter-spacing:-.055em; line-height:1.15; }\n.hayeon-profile-notes-head p { max-width:310px; color:#A8ADA9; font-size:12px; line-height:1.7; }\n.hayeon-profile-notes-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; }\n.hayeon-profile-notes-grid article { min-width:0; border-bottom:1px solid rgba(255,255,255,.11); padding:28px 24px 28px 0; }\n.hayeon-profile-notes-grid article+article { border-left:1px solid rgba(255,255,255,.11); padding-left:24px; }\n.hayeon-profile-notes-grid small { display:block; color:var(--hayeon-archive-accent); font-size:11px; font-weight:650; letter-spacing:.07em; }\n.hayeon-profile-notes-grid h3 { margin-top:10px; color:var(--hayeon-archive-ink); font-size:clamp(18px,2.5vw,24px); font-weight:600; letter-spacing:-.03em; }\n.hayeon-profile-notes-grid p { margin-top:12px; color:#AEB5B1; font-size:12px; line-height:1.9; }\n.hayeon-profile-notes-grid a { display:inline-flex; align-items:center; min-height:42px; margin-top:15px; color:#8DE9D4; font-size:12px; text-decoration:underline; text-underline-offset:4px; }\n.hayeon-profile-notes-grid a:focus-visible { outline:2px solid var(--hayeon-archive-accent); outline-offset:4px; }\n.shion-overview-photo > img { background:#1C1F1F; }\n.shion-overview-photo > span { min-height:55px; }\n.shion-overview-photo small { white-space:normal; line-height:1.5; }\n@media(max-width:760px) {\n  .shion-profile .shion-profile-portrait { margin-inline:auto; max-width:520px; }\n  .shion-profile .shion-profile-portrait img { max-height:470px; aspect-ratio:4/4.3; object-position:center 25%; }\n  .shion-profile .shion-profile-info { align-self:start; }\n  .hayeon-profile-notes-head { display:block; }\n  .hayeon-profile-notes-head p { margin-top:13px; }\n  .hayeon-profile-notes-grid { grid-template-columns:1fr; }\n  .hayeon-profile-notes-grid article { padding:22px 0; }\n  .hayeon-profile-notes-grid article+article { border-left:0; padding-left:0; }\n  .shion-overview-photo-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }\n  .shion-overview-photo > span { padding:9px 7px; font-size:10px; min-height:62px; }\n}\n@media(max-width:360px) {\n  .shion-overview-photo-grid { gap:6px; }\n  .shion-profile .shion-profile-portrait img { max-height:405px; }\n}\n@media(prefers-reduced-motion:reduce) {\n  .shion-profile .shion-profile-portrait, .hayeon-profile-notes-grid article { animation:none !important; }\n}\n',encoding='utf-8')
+          component_path=ROOT/'src/components/HayeonProfileNotes.tsx'
+          if component_path.exists() and component_path.read_text(encoding='utf-8') != 'import { useI18n } from \'../i18n/I18nContext\';\n\ntype Lang = \'ko\' | \'en\' | \'ja\';\ntype Copy = { heading:string; intro:string; labels:[string,string,string]; descriptions:[string,string,string]; source:string };\nconst TEXT: Record<Lang,Copy> = {\n  ko: { heading:\'하연의 기록\', intro:\'공개된 활동과 확인 가능한 출처를 중심으로 정리했습니다.\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'2023년 12월 23일, tripleS의 열아홉 번째 멤버로 공개.\',\n      \'2023년 공개된 NXT의 멤버로서 〈Just Do It〉 활동.\',\n      \'2025년 msnz zenith에 참여해 〈Q&A〉 활동.\'], source:\'자료 보기\' },\n  en: { heading:\'The HaYeon Record\', intro:\'A concise guide to documented activities and their public sources.\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'Introduced as the nineteenth member on December 23, 2023.\',\n      \'Member of NXT, introduced in 2023 with “Just Do It”.\',\n      \'Joined msnz zenith for “Q&A” activities in 2025.\'], source:\'View source\' },\n  ja: { heading:\'ハヨンの記録\', intro:\'公開された活動と出典に基づいて整理しました。\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'2023年12月23日にtripleSの19番目のメンバーとして公開。\',\n      \'2023年に公開されたNXTのメンバー。「Just Do It」で活動。\',\n      \'2025年、msnz zenithとして「Q&A」で活動。\'], source:\'出典を見る\' },\n};\nconst REFERENCES = [\n  \'https://triples.fandom.com/wiki/Jeong_HaYeon\',\n  \'https://triplesfans.com/dimensions/nxt\',\n  \'https://triplesfans.com/dimensions/zenith\',\n];\n\nexport default function HayeonProfileNotes() {\n  const { language } = useI18n();\n  const copy = TEXT[language];\n  return <section className="hayeon-profile-notes" aria-labelledby="hayeon-profile-notes-title">\n    <header className="hayeon-profile-notes-head">\n      <div><span>MEMBER ARCHIVE / S19</span><h2 id="hayeon-profile-notes-title">{copy.heading}</h2></div>\n      <p>{copy.intro}</p>\n    </header>\n    <div className="hayeon-profile-notes-grid">\n      {copy.labels.map((label, index) => <article key={label}>\n        <small>{String(index + 1).padStart(2,\'0\')} / {label}</small>\n        <h3>{label.split(\' · \')[0]}</h3>\n        <p>{copy.descriptions[index]}</p>\n        <a href={REFERENCES[index]} target="_blank" rel="noopener noreferrer">{copy.source} ↗</a>\n      </article>)}\n    </div>\n  </section>;\n}\n':
+              raise SystemExit('STOP: unexpected existing profile extension file')
+          component_path.write_text('import { useI18n } from \'../i18n/I18nContext\';\n\ntype Lang = \'ko\' | \'en\' | \'ja\';\ntype Copy = { heading:string; intro:string; labels:[string,string,string]; descriptions:[string,string,string]; source:string };\nconst TEXT: Record<Lang,Copy> = {\n  ko: { heading:\'하연의 기록\', intro:\'공개된 활동과 확인 가능한 출처를 중심으로 정리했습니다.\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'2023년 12월 23일, tripleS의 열아홉 번째 멤버로 공개.\',\n      \'2023년 공개된 NXT의 멤버로서 〈Just Do It〉 활동.\',\n      \'2025년 msnz zenith에 참여해 〈Q&A〉 활동.\'], source:\'자료 보기\' },\n  en: { heading:\'The HaYeon Record\', intro:\'A concise guide to documented activities and their public sources.\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'Introduced as the nineteenth member on December 23, 2023.\',\n      \'Member of NXT, introduced in 2023 with “Just Do It”.\',\n      \'Joined msnz zenith for “Q&A” activities in 2025.\'], source:\'View source\' },\n  ja: { heading:\'ハヨンの記録\', intro:\'公開された活動と出典に基づいて整理しました。\',\n    labels:[\'S19 · REVEAL\',\'NXT · UNIT\',\'msnz · zenith\'],\n    descriptions:[\'2023年12月23日にtripleSの19番目のメンバーとして公開。\',\n      \'2023年に公開されたNXTのメンバー。「Just Do It」で活動。\',\n      \'2025年、msnz zenithとして「Q&A」で活動。\'], source:\'出典を見る\' },\n};\nconst REFERENCES = [\n  \'https://triples.fandom.com/wiki/Jeong_HaYeon\',\n  \'https://triplesfans.com/dimensions/nxt\',\n  \'https://triplesfans.com/dimensions/zenith\',\n];\n\nexport default function HayeonProfileNotes() {\n  const { language } = useI18n();\n  const copy = TEXT[language];\n  return <section className="hayeon-profile-notes" aria-labelledby="hayeon-profile-notes-title">\n    <header className="hayeon-profile-notes-head">\n      <div><span>MEMBER ARCHIVE / S19</span><h2 id="hayeon-profile-notes-title">{copy.heading}</h2></div>\n      <p>{copy.intro}</p>\n    </header>\n    <div className="hayeon-profile-notes-grid">\n      {copy.labels.map((label, index) => <article key={label}>\n        <small>{String(index + 1).padStart(2,\'0\')} / {label}</small>\n        <h3>{label.split(\' · \')[0]}</h3>\n        <p>{copy.descriptions[index]}</p>\n        <a href={REFERENCES[index]} target="_blank" rel="noopener noreferrer">{copy.source} ↗</a>\n      </article>)}\n    </div>\n  </section>;\n}\n',encoding='utf-8')
+          print('HAYEON 2026 UI + photos + World Cup patch: verified source anchors and applied.')
+          PYCODE
+          python3 /tmp/hayeon-ui-v3.py
+          git diff --stat
+          if [ "${{ inputs.mode }}" = 'preview' ]; then
+            echo 'Preview only: NO source or data pushed.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Node 22
+        if: inputs.mode == 'apply'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        if: inputs.mode == 'apply'
+        run: npm install --no-audit --no-fund
+      - name: Verify original S19 member data
+        if: inputs.mode == 'apply'
+        run: node scripts/audit-hayeon.mjs
+      - name: Prepare same-origin World Cup artwork for share PNG
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cache-objekt-poster.mjs --self-test
+          node scripts/cache-objekt-poster.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const data = JSON.parse(fs.readFileSync('public/data/objekt-poster-map.json','utf8'));
+          console.log(`World Cup cached images: ${data.prepared}/${data.totalSourceImages}`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\nWorld Cup optimized local card photos: **${data.prepared}/${data.totalSourceImages}**.\n`);
+          NODE
+      - name: TypeScript and production build
+        if: inputs.mode == 'apply'
+        run: npm run build
+      - name: Safety check - do not modify source data or business logic
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- public/data/photos.json public/data/films.json public/data/objekt.json public/data/hayeon.json src/lib/catalog.ts src/lib/tournament.ts src/lib/topFour.ts src/state/ArchiveContext.tsx
+          echo 'S19 JSON, routing, catalog, bracket and ranking logic unchanged.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit targeted polish and cached images
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- src/main.tsx src/hayeon-detail-v3.css src/components/HayeonProfileNotes.tsx src/components/ProfilePage.tsx src/components/HomeUpdates.tsx src/components/TournamentArena.tsx src/lib/searchIndex.ts src/lib/worldCupPoster.ts
+          git add -- public/data/objekt-poster-map.json
+          if [ -d public/objekt-poster ]; then
+            git add -- public/objekt-poster/
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'ui: polish HAYEON profile 2026 photos and World Cup sharing'
+            git push origin HEAD:main
+          else
+            echo 'No changes to commit.'
+          fi
+      - name: Build verified Pages artifact
+        if: inputs.mode == 'apply'
+        uses: actions/configure-pages@v5
+      - name: Upload verified Pages artifact
+        if: inputs.mode == 'apply'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Mark apply completed
+        id: outcome
+        if: inputs.mode == 'apply'
+        run: echo 'applied=true' >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: update
+    if: needs.update.outputs.applied == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.release.outputs.page_url }}
+    steps:
+      - id: release
+        uses: actions/deploy-pages@v4
