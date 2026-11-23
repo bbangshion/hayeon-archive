@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-23T21:58:29.985656+00:00",
+  "generatedAt": "2026-11-23T22:01:34.106446+00:00",
   "note": "자동 검색 조건에 일치하는 공개·임베드 영상 링크만 수집함. 이름/설명 문구만으로 출연이 검증되지는 않으며 검토 필요. 영상 파일을 다운로드하지 않음.",
-  "mode": "scan",
+  "mode": "publish_all",
   "searchQueries": [
     "tripleS 정하연 직캠",
     "트리플에스 정하연 무대",
@@ -15,11 +15,11 @@
   ],
   "summary": {
     "searchCalls": 9,
-    "rawDistinctVideos": 299,
-    "matchedVideos": 196,
-    "addedToFilm": 0,
-    "duplicatesSkipped": 0,
-    "filmTotal": null
+    "rawDistinctVideos": 310,
+    "matchedVideos": 201,
+    "addedToFilm": 199,
+    "duplicatesSkipped": 2,
+    "filmTotal": 205
   },
   "candidates": [
     {
@@ -43,7 +43,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "z3QzdQOjoc4",
@@ -66,7 +66,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "YYEKmM8No8E",
@@ -89,7 +89,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "8nG2YnvbAc4",
@@ -112,7 +112,30 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "wSZ6EKfV7xo",
+      "title": "정하연의 오빠미 넘치는 챌린지 #트리플에스",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-11-13",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "지서연의도돌이",
+      "channelId": "UC1V4Uu8Bls87Evxc8wQvCCw",
+      "videoUrl": "https://www.youtube.com/watch?v=wSZ6EKfV7xo",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "4dBtJrHp8Ec",
@@ -135,7 +158,30 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "AaHW9tBPYTg",
+      "title": "하요이 폼미💥 게임은 기세잖아, 안 그래? 🔥⚡ [마법소녀 정하연] l 라이엇PC방 l EP19",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-11-10",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "럭키 팩토리",
+      "channelId": "UCoK8D7IDRkrD9h7Px5zaPlQ",
+      "videoUrl": "https://www.youtube.com/watch?v=AaHW9tBPYTg",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "piJQGADN1iw",
@@ -156,10 +202,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "KX-6FLZsfII",
@@ -182,7 +227,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "ce0243NCPrk",
@@ -205,7 +250,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Zqjgws1fPgc",
@@ -231,7 +276,53 @@
         "tripleS NXT 하연 직캠",
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "iBKMXjXdXC4",
+      "title": "261029 출국 정하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-10-28",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "말랑모찌상큼07정하연",
+      "channelId": "UCykJczWv9x15QIHh3R5aTQw",
+      "videoUrl": "https://www.youtube.com/watch?v=iBKMXjXdXC4",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "MBNC2zAw9yY",
+      "title": "뚱요이 정하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-10-28",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "말랑모찌상큼07정하연",
+      "channelId": "UCykJczWv9x15QIHh3R5aTQw",
+      "videoUrl": "https://www.youtube.com/watch?v=MBNC2zAw9yY",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "RbBvajQkF9s",
@@ -254,7 +345,30 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "tPfyGF7MkUo",
+      "title": "[4K] 261018 트리플에스 tripleS  - 'World Wild Women' 「 하연 직캠 Hayeon Fancam 」 @ Andless World Tour Taipei",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-10-25",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "Kioku",
+      "channelId": "UCrSjCIwZB6yHgQnFt7ZyeIA",
+      "videoUrl": "https://www.youtube.com/watch?v=tPfyGF7MkUo",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS Jeong HaYeon fancam"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "feNBhkRn4gE",
@@ -275,10 +389,32 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "03jQeY-fUKo",
+      "title": "트리플에스 tripleS 'Girls Never Die' 하연 HaYeon 20261018 Andless in Taipei",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-10-25",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "cataLYze",
+      "channelId": "UCu2t3aBmxDf8Wy9oZEh5x8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=03jQeY-fUKo",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "wKCMCzseLiE",
@@ -301,7 +437,7 @@
       "queries": [
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "xWgNt3cuKEk",
@@ -328,7 +464,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "okD4NOQmbY0",
@@ -351,7 +487,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Z_Vk3uBQU2w",
@@ -376,7 +512,7 @@
         "tripleS NXT 하연 직캠",
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "iry2FCvhehc",
@@ -399,7 +535,30 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "W5OEOWvu89A",
+      "title": "[4k] 261010-11 트리플에스 하연 누난 너무 예뻐(Replay) 직캠 tripleS HaYeon fancam @ 2026 tripleS WORLD TOUR ANDLESS",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-10-17",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "ASTROミ",
+      "channelId": "UCcAw8s6hYTrWDCO0-rjfjXg",
+      "videoUrl": "https://www.youtube.com/watch?v=W5OEOWvu89A",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "rSOx_srtblk",
@@ -420,10 +579,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
-        "트리플에스 정하연 무대"
+        "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "ug_D6kH8eyA",
@@ -445,9 +603,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS Jeong HaYeon fancam",
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "E71EYxPi3b4",
@@ -470,7 +629,30 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "xqWOLvDLpjI",
+      "title": "마법소녀는 나야 둘이 될 수 없어 ~ 👯‍♀️🤷‍️️ [마법소녀 정하연] l 과일에 반하다, 프루타 l EP17",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-10-13",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "럭키 팩토리",
+      "channelId": "UCoK8D7IDRkrD9h7Px5zaPlQ",
+      "videoUrl": "https://www.youtube.com/watch?v=xqWOLvDLpjI",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "r6QHxIHm2BI",
@@ -491,9 +673,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "au_9PQgyntk",
@@ -518,7 +701,7 @@
         "tripleS 정하연 직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "iTvx4mCzMmw",
@@ -541,7 +724,30 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "UpKY9p2eNJg",
+      "title": "트리플에스 정하연 ( 샤이니 - 누난 너무 예뻐 ) tripleS World Tour ANDLESS in Seoul 직캠 Fancam 261010",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-10-12",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "mang2goon",
+      "channelId": "UCZ-l3cfBR3azwsmAzlcTf7Q",
+      "videoUrl": "https://www.youtube.com/watch?v=UpKY9p2eNJg",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "EcU9IEq6p24",
@@ -564,7 +770,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "A14rzvbY2DQ",
@@ -587,7 +793,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "qy_3oMtcE6U",
@@ -610,7 +816,7 @@
       "queries": [
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "-YNNNz2TCNc",
@@ -633,7 +839,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "s64glQKcuRA",
@@ -656,7 +862,7 @@
       "queries": [
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "f9pD9Rk43U4",
@@ -679,7 +885,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Msa5z9Mwk00",
@@ -702,7 +908,7 @@
       "queries": [
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "AdXzM3_Zv_Y",
@@ -725,7 +931,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9bzVE6TXmUI",
@@ -747,9 +953,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS Jeong HaYeon fancam",
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "CeT_jnKL5UM",
@@ -770,11 +977,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 직캠",
-        "tripleS 하연 입덕직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "S1yv3bW69EU",
@@ -821,7 +1026,7 @@
         "#트리플에스 #정하연",
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "KnyGhq1_PoA",
@@ -844,7 +1049,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "2FgltoHwtTY",
@@ -867,7 +1072,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Xrrc65Y2fx4",
@@ -890,9 +1095,33 @@
       "queries": [
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
+        "tripleS 정하연 직캠",
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "0xIq0PViim8",
+      "title": "트리플에스 정하연, You Finally Realize #tripleS 깨어 직캠",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-09-24",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "펌킨이야",
+      "channelId": "UCUKhv-jyReqchkSOKm45RQA",
+      "videoUrl": "https://www.youtube.com/watch?v=0xIq0PViim8",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "f-Z9sK-KJP0",
@@ -915,7 +1144,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "caGR3z6W9R8",
@@ -938,9 +1167,11 @@
       "queries": [
         "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "8m9xL-qibMA",
@@ -964,11 +1195,9 @@
         "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 직캠",
-        "tripleS 하연 입덕직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "4Ji0V_3d8Ec",
@@ -991,7 +1220,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "AEFqaZVJtzo",
@@ -1012,11 +1241,32 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠",
-        "tripleS 하연 입덕직캠",
-        "트리플에스 정하연 무대"
+        "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "3yLyTJ8--qE",
+      "title": "대장님의 걸네다 #트리플에스 #정하연 #하요이",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-09-21",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "무슨 말이 필요해",
+      "channelId": "UCf5WKpIBAdxHYIlwzIKWvUw",
+      "videoUrl": "https://www.youtube.com/watch?v=3yLyTJ8--qE",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "JUxw3X2JdS4",
@@ -1039,7 +1289,7 @@
       "queries": [
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "h2JFPG3dBP8",
@@ -1060,10 +1310,32 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "EFAq8PxhqOE",
+      "title": "EP.3 또 무슨 말로 내 심장을 뒤집어놓으려고 | 운명의 미소녀 💌 정하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-09-14",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "tripleS official",
+      "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=EFAq8PxhqOE",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "-KJg2Lb9NZE",
@@ -1086,7 +1358,30 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "Zvjvzqnd1LI",
+      "title": "배우 정하연 미리 보기👀 #tripleS #트리플에스 #HaYeon #하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-09-10",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "tripleS official",
+      "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=Zvjvzqnd1LI",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "QmQnKjSoUT4",
@@ -1107,9 +1402,56 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 SIGNAL"
+        "tripleS 정하연 SIGNAL",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "ZOZWIi4iNUs",
+      "title": "현시점 존재감 뿜뿜 tripleS 트리플에스 '정하연' #트리플에스 #triples #정하연 #fancam",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-08-30",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "노느니특공대(NoNuNi_Raiders)",
+      "channelId": "UCHdz8GvH5NYnmntKw1Ko6jQ",
+      "videoUrl": "https://www.youtube.com/watch?v=ZOZWIi4iNUs",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "NgoBRtowzio",
+      "title": "[트리플에스] 정하연 잡으러 온 김유연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-08-29",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "07즈가먹다남긴떡볶이",
+      "channelId": "UCbzDjt_JhJxaJFOyU6rwHMg",
+      "videoUrl": "https://www.youtube.com/watch?v=NgoBRtowzio",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "lvA23ZTIne0",
@@ -1132,7 +1474,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "h6OY3Amr7s0",
@@ -1155,7 +1497,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "JfISIYspSXI",
@@ -1249,7 +1591,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "xcycCFsfGIQ",
@@ -1276,6 +1618,29 @@
       "status": "pending"
     },
     {
+      "youtubeId": "AfRjc7z-7Jc",
+      "title": "[트리플에스] 정하연) 심장에 개큰무리",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-07-02",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "단풍유연",
+      "channelId": "UCcBAVgW8ywTqWZr5cNInstw",
+      "videoUrl": "https://www.youtube.com/watch?v=AfRjc7z-7Jc",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
+    },
+    {
       "youtubeId": "WNi6uG8uTaE",
       "title": "260628 정하연 Jeong HaYeon 트리플에스 tripleS💿깨어(Are You Alive) [8K 30P] 직캠 FANCAM | 부산원아시아페스티벌 | GalaxyMaru",
       "category": "performance",
@@ -1294,14 +1659,12 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
         "tripleS 정하연 직캠",
-        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9F8rta-0S3A",
@@ -1322,10 +1685,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
-        "tripleS 하연 입덕직캠"
+        "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "m11xp0pzymM",
@@ -1369,9 +1731,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연"
+        "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "vkuMEyescOI",
@@ -1398,7 +1760,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "wQoIo09rXXQ",
@@ -1419,10 +1781,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "VXBkzKDwD3I",
@@ -1444,9 +1805,9 @@
       "sourceKind": "broadcaster-name",
       "queries": [
         "tripleS NXT 하연 직캠",
-        "tripleS 하연 입덕직캠"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "tjROmfHYW2E",
@@ -1474,7 +1835,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "XAoIf1eEHQE",
@@ -1500,7 +1861,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "BKg-wJgVTxA",
@@ -1524,7 +1885,7 @@
         "#트리플에스 #정하연",
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9Ugw7RlmY8k",
@@ -1547,7 +1908,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "ufEmoAGljmQ",
@@ -1570,7 +1931,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "s7DTvMDQxok",
@@ -1593,7 +1954,7 @@
       "queries": [
         "tripleS HaYeon KBS MBC SBS Mnet"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "c8w0RxPQ4_s",
@@ -1616,7 +1977,7 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "eUzsAiO9Two",
@@ -1667,7 +2028,30 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "W2YNHl49jk0",
+      "title": "[4k] tripleS 정하연 미니팬미팅 fancam │260606 음악중심 미니팬미팅",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-06-06",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "탐정단_fancam",
+      "channelId": "UC1rOT3z-8HaSUw3JDC2au6g",
+      "videoUrl": "https://www.youtube.com/watch?v=W2YNHl49jk0",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "Jwwo8xAHIug",
@@ -1688,11 +2072,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "tripleS 하연 입덕직캠",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "xygIEIQlPg0",
@@ -1718,6 +2100,29 @@
       "status": "pending"
     },
     {
+      "youtubeId": "EUAQjpUedQ8",
+      "title": "트리플에스(tripleS) 정하연 / 'LOVE & POP' 파트 1’ 쇼케이스 [엔터뷰라이브]",
+      "category": "live",
+      "subCategory": "live",
+      "publishedAt": "2026-06-02",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "entview_live",
+      "channelId": "UCwTCQS4TrwOxz-NJmwnvSyA",
+      "videoUrl": "https://www.youtube.com/watch?v=EUAQjpUedQ8",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
+    },
+    {
       "youtubeId": "IMnjsapJngA",
       "title": "트리플에스 신곡 정하연 파트",
       "category": "other",
@@ -1738,7 +2143,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "fDtfdzfkKDA",
@@ -1784,7 +2189,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "e5sQae71lZ8",
@@ -1805,10 +2210,32 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "xekuYXnjS1o",
+      "title": "'찡긋' 트리플에스(tripleS) 정하연 직캠 @MySecretNewZone",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-05-01",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "펌킨이야",
+      "channelId": "UCUKhv-jyReqchkSOKm45RQA",
+      "videoUrl": "https://www.youtube.com/watch?v=xekuYXnjS1o",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "ogcxIG-_CCs",
@@ -1835,7 +2262,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "WadgatVA-Dc",
@@ -1857,9 +2284,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "YaJtXqDJdDY",
@@ -1882,7 +2310,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "UbDIGNu_Y20",
@@ -1904,9 +2332,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "qqWNK6r5ems",
@@ -1929,7 +2358,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "2HSNyBxURjM",
@@ -1952,7 +2381,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9BZPmbnPDGs",
@@ -1975,10 +2404,32 @@
       "queries": [
         "#트리플에스 #정하연",
         "tripleS NXT 하연 직캠",
-        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "ll020Xb_JVY",
+      "title": "Heavy Metal Wings #트리플에스 #tripleS #하연 #hayeon #yooyeon #유연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-04-18",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "cataLYze",
+      "channelId": "UCu2t3aBmxDf8Wy9oZEh5x8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=ll020Xb_JVY",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "eYXVoEh2DqI",
@@ -2001,7 +2452,30 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "dk9HxMMwU2Q",
+      "title": "'너를 만나 이어져' 트리플에스(tripleS) 정하연 Dimension 직캠 @MySecretNewZone",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-04-15",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "펌킨이야",
+      "channelId": "UCUKhv-jyReqchkSOKm45RQA",
+      "videoUrl": "https://www.youtube.com/watch?v=dk9HxMMwU2Q",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "ea5WyVz-TGE",
@@ -2048,7 +2522,7 @@
         "tripleS msnz zenith 하연",
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "jpBFQI9TIow",
@@ -2069,10 +2543,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠",
-        "tripleS 하연 입덕직캠"
+        "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "edWMFSUQHOw",
@@ -2118,7 +2591,30 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "s120rpaT17w",
+      "title": "'날 닮은 것 같아' 트리플에스(tripleS) 정하연 깨어 직캠 @MySecretNewZone",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-04-07",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "펌킨이야",
+      "channelId": "UCUKhv-jyReqchkSOKm45RQA",
+      "videoUrl": "https://www.youtube.com/watch?v=s120rpaT17w",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "-q0GcaXx-PE",
@@ -2142,12 +2638,11 @@
         "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 SIGNAL",
         "tripleS 정하연 직캠",
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "ZRvbHhAEq1U",
@@ -2191,11 +2686,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 SIGNAL",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "zBgRigKmpIw",
@@ -2216,10 +2710,32 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 직캠",
-        "tripleS 하연 입덕직캠"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "tM5fIF38EW0",
+      "title": "[4k] tripleS - Diablo 정하연 위주 fancam │260404 My Secret New Zone in Seoul",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2026-04-04",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "탐정단_fancam",
+      "channelId": "UC1rOT3z-8HaSUw3JDC2au6g",
+      "videoUrl": "https://www.youtube.com/watch?v=tM5fIF38EW0",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "nXV4XLXiibA",
@@ -2242,7 +2758,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "cF9cDp5NMu8",
@@ -2264,9 +2780,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS NXT 하연 직캠",
-        "tripleS msnz zenith 하연"
+        "tripleS msnz zenith 하연",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Kjtj7DQRFPQ",
@@ -2287,9 +2804,33 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
+        "tripleS msnz zenith 하연",
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "szk9E7e6iIU",
+      "title": "Number📞\r\r#tripleS #트리플에스 #トリプルS\r#トリプルエス #トエス\r#HaYeon #하연 #ハヨン",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-03-21",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "tripleS official",
+      "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=szk9E7e6iIU",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "HVrnLOqfqt0",
@@ -2335,7 +2876,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "dRfwvA8_yMw",
@@ -2358,7 +2899,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "wk9CjCqrJyQ",
@@ -2379,9 +2920,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "x5qz1RP99h4",
@@ -2404,7 +2946,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "A0wZcQ0-_3o",
@@ -2430,7 +2972,30 @@
         "tripleS 정하연 직캠",
         "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "26JlS3RAE_A",
+      "title": "하연아 채연 언니한테 질 수 없잖아❤️‍🔥 #정하연 #트리플에스 #jeonghayeon",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2026-02-17",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "그냥취미활동",
+      "channelId": "UCoFhwPtrmxmhUhFaqLJZ90w",
+      "videoUrl": "https://www.youtube.com/watch?v=26JlS3RAE_A",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "yWisqSL7RoM",
@@ -2451,9 +3016,10 @@
       "reviewPriority": "check",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 SIGNAL"
+        "tripleS 정하연 SIGNAL",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "0sDCjLifx-w",
@@ -2479,6 +3045,29 @@
       "status": "pending"
     },
     {
+      "youtubeId": "NTYCGOhrBZw",
+      "title": "[4K] 251130 tripeS (트리플에스) 정하연 직캠 'Christmas Alone' HAYEON CAM @ FANSIGNING EVENT",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2025-12-25",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "BLESSED",
+      "channelId": "UCwAiTv-u6BjpjZMNL4QFB4A",
+      "videoUrl": "https://www.youtube.com/watch?v=NTYCGOhrBZw",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "트리플에스 정하연 무대"
+      ],
+      "status": "published"
+    },
+    {
       "youtubeId": "2Ota1R9-_uk",
       "title": "이 말이 장난같지? | tripleS zenith | 정하연",
       "category": "other",
@@ -2499,7 +3088,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "pcj6GgN9KjM",
@@ -2523,7 +3112,7 @@
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "fLVD6lbSKRw",
@@ -2545,10 +3134,9 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "#트리플에스 #정하연",
-        "tripleS 정하연 직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "l0OmRw9jfJ8",
@@ -2569,10 +3157,55 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
+        "#트리플에스 #정하연"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "deBNrd06E00",
+      "title": "[트리플에스]정하연 미쳤나봐",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2025-12-19",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "파도SSS",
+      "channelId": "UCn-hcjKQWqlK8ncO9bFx9-Q",
+      "videoUrl": "https://www.youtube.com/watch?v=deBNrd06E00",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 하연 입덕직캠"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "lf_baS3PH28",
+      "title": "251202 정하연 직캠 “Christmas Alone” #정하연 #트리플에스_미소녀즈#jeonghayeon#tripleS #tripleS_msnz #Christmas_Alone",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2025-12-13",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "UNZENAMAY",
+      "channelId": "UCmi5Zyw76XGHQfQ3Vi58ezA",
+      "videoUrl": "https://www.youtube.com/watch?v=lf_baS3PH28",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "RbSAomXIQ2I",
@@ -2641,7 +3274,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "rbP-O_uplB8",
@@ -2662,9 +3295,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연"
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "n4EYQ6bdyn0",
@@ -2689,12 +3322,11 @@
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
         "tripleS msnz zenith 하연",
-        "tripleS 정하연 SIGNAL",
         "tripleS 정하연 직캠",
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "iZ1UpAZSvYc",
@@ -2717,7 +3349,53 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "QziqURl5nyI",
+      "title": "[트리플에스] 별명 부자 정하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2025-12-09",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "하연하다",
+      "channelId": "UCNDt-BaLmz_HN1ue4EpUjaA",
+      "videoUrl": "https://www.youtube.com/watch?v=QziqURl5nyI",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
+    },
+    {
+      "youtubeId": "5UXAUqMDDVs",
+      "title": "꼴보기가 싫어~ .. 트리플에스 김채원 정하연 ❘ tripleS msnz (미소녀즈) ❘ Signal Live 251209",
+      "category": "signal",
+      "subCategory": "signal",
+      "publishedAt": "2025-12-09",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "찰나의채원: 왹(WÆK)™",
+      "channelId": "UCpAket7oBy6IBA2fKLP5Kng",
+      "videoUrl": "https://www.youtube.com/watch?v=5UXAUqMDDVs",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "GkWFQLxcRQQ",
@@ -2763,7 +3441,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "eiLi98lW6pA",
@@ -2786,7 +3464,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "p-HWpeqVqdY",
@@ -2830,9 +3508,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연"
+        "#트리플에스 #정하연",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Y-Gi2dJYuJg",
@@ -2854,11 +3533,11 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "#트리플에스 #정하연",
-        "tripleS 정하연 SIGNAL",
         "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "21d1WrfzUjY",
@@ -2881,10 +3560,9 @@
       "queries": [
         "tripleS Jeong HaYeon fancam",
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 직캠",
-        "tripleS 하연 입덕직캠"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "w57bVl_4Z_Q",
@@ -2930,9 +3608,10 @@
       "queries": [
         "tripleS Jeong HaYeon fancam",
         "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "c61A1VxW2Ls",
@@ -2955,7 +3634,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "n0VYF506pho",
@@ -2976,10 +3655,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS HaYeon KBS MBC SBS Mnet",
-        "tripleS 하연 입덕직캠"
+        "tripleS HaYeon KBS MBC SBS Mnet"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "v7-WIRskH1Y",
@@ -3002,7 +3680,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "X_bnKUy5l-U",
@@ -3025,7 +3703,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "rT-XIiyHUlg",
@@ -3047,11 +3725,13 @@
       "sourceKind": "broadcaster-name",
       "queries": [
         "#트리플에스 #정하연",
+        "tripleS HaYeon KBS MBC SBS Mnet",
         "tripleS Jeong HaYeon fancam",
         "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "5VboXxhY3yM",
@@ -3097,7 +3777,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Ooez1k4ufoQ",
@@ -3120,7 +3800,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "DJavrC0XoVw",
@@ -3189,7 +3869,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "iMTCdwspeHM",
@@ -3258,7 +3938,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "-giGcbZchOg",
@@ -3303,9 +3983,10 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "dpo9qwNndH8",
@@ -3328,7 +4009,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9M7ALW5msiU",
@@ -3349,9 +4030,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "2-bxL_t2QaY",
@@ -3374,7 +4056,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "WN0uJemaIU0",
@@ -3398,9 +4080,10 @@
         "#트리플에스 #정하연",
         "tripleS 정하연 SIGNAL",
         "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "2oOzKDhsrbg",
@@ -3421,9 +4104,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "_Mkl95dR9JQ",
@@ -3444,10 +4128,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "zbsIp4y0FFQ",
@@ -3470,7 +4153,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "hugB8_vmJJs",
@@ -3491,10 +4174,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "uFrA18J4IVM",
@@ -3539,9 +4221,11 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Ot518DDVLuI",
@@ -3562,9 +4246,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 하연 입덕직캠"
+        "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "5w8Ba0eCaxo",
@@ -3588,7 +4272,7 @@
         "tripleS 정하연 직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "mf2WK-yjFUQ",
@@ -3609,9 +4293,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 SIGNAL"
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "gTDF2dlNLcg",
@@ -3635,7 +4319,7 @@
         "tripleS 정하연 직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "dCWelTeT0Pg",
@@ -3657,10 +4341,11 @@
       "sourceKind": "channel-unverified",
       "queries": [
         "tripleS NXT 하연 직캠",
-        "tripleS 정하연 SIGNAL",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "tripleS 하연 입덕직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Vqy7cXxXSrs",
@@ -3683,7 +4368,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "GSqWbrzA6pA",
@@ -3709,7 +4394,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "2mIH2bKDuAY",
@@ -3730,10 +4415,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "-mXGh5g4YyQ",
@@ -3777,10 +4461,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 SIGNAL"
+        "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "_02PM738bcQ",
@@ -3804,7 +4487,7 @@
         "#트리플에스 #정하연",
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Fpl-fWBFGVQ",
@@ -3827,7 +4510,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "B37S5J1ulgg",
@@ -3879,7 +4562,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "jwgwDq_NDIg",
@@ -3902,7 +4585,30 @@
       "queries": [
         "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "cVA7lBTQ7XE",
+      "title": "갑자기 펼쳐진 삼행시 디스전 | tripleS Alphie | 정하연 김채원",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2025-09-08",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "오늘의SSS",
+      "channelId": "UC9EZR9zqokxwUG96VFGAu0Q",
+      "videoUrl": "https://www.youtube.com/watch?v=cVA7lBTQ7XE",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "srX8q6CwRRI",
@@ -3923,10 +4629,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "sP7ucvbCMwk",
@@ -3949,7 +4654,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "MWJCY9e4Sik",
@@ -3972,7 +4677,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "A-NSEpgloiI",
@@ -3995,7 +4700,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "CYPj12QS9IU",
@@ -4016,11 +4721,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "tripleS 하연 입덕직캠",
-        "트리플에스 정하연 무대"
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "uHWzfqNYq7A",
@@ -4043,7 +4746,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "HQOv8MHyVKk",
@@ -4068,7 +4771,7 @@
         "tripleS NXT 하연 직캠",
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "LexLCPxlf5A",
@@ -4114,7 +4817,7 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "0sKhyi8xpLc",
@@ -4137,7 +4840,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "XyA4khlRsYI",
@@ -4160,7 +4863,7 @@
       "queries": [
         "tripleS HaYeon KBS MBC SBS Mnet"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "N6wWJtP8EZI",
@@ -4183,7 +4886,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Ps9SUIZ480Y",
@@ -4204,10 +4907,9 @@
       "reviewPriority": "high",
       "sourceKind": "broadcaster-name",
       "queries": [
-        "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 직캠"
+        "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "SoO--YFXe0U",
@@ -4230,7 +4932,7 @@
       "queries": [
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "47_HII82wzU",
@@ -4253,10 +4955,33 @@
       "queries": [
         "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 SIGNAL",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "ipwouYP8a-k",
+      "title": "사탄들의 학교에 주시퍼의 등장이라…😈#tripleS #트리플에스 #トリプルS #ASSEMBLE25 #깨어 #Are_You_Alive #JooBin #주빈 #HaYeon #하연",
+      "category": "other",
+      "subCategory": "interview-or-behind",
+      "publishedAt": "2025-05-23",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "tripleS official",
+      "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=ipwouYP8a-k",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS msnz zenith 하연"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "5gYP40oUmcA",
@@ -4279,7 +5004,7 @@
       "queries": [
         "tripleS HaYeon KBS MBC SBS Mnet"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Vrz2Wv17O58",
@@ -4302,7 +5027,7 @@
       "queries": [
         "tripleS Jeong HaYeon fancam"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "4vYwG16dtB8",
@@ -4325,7 +5050,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "kqN9CLX81uo",
@@ -4348,7 +5073,30 @@
       "queries": [
         "tripleS 정하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "DDzbr-oJrAw",
+      "title": "[4K] 250419 'Rising' 트리플에스 하연 직캠 tripleS HAYEON fancam | 쌍계사 차문화대축전",
+      "category": "performance",
+      "subCategory": "fancam",
+      "publishedAt": "2025-04-21",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "tripleS",
+      "scope": "solo",
+      "source": "HARU",
+      "channelId": "UCJd-YZ-xPUZsG4n3I1RVOlw",
+      "videoUrl": "https://www.youtube.com/watch?v=DDzbr-oJrAw",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "high",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS HaYeon KBS MBC SBS Mnet"
+      ],
+      "status": "published"
     },
     {
       "youtubeId": "1gKarZdhppE",
@@ -4374,7 +5122,7 @@
         "tripleS 하연 입덕직캠",
         "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "YlDMbmBCc24",
@@ -4395,10 +5143,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "#트리플에스 #정하연",
-        "트리플에스 정하연 무대"
+        "#트리플에스 #정하연"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "ZuSn8tWQI7g",
@@ -4419,9 +5166,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 SIGNAL"
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "CzDAz5IPCsA",
@@ -4444,7 +5191,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "nQRtB9Ynz0k",
@@ -4467,7 +5214,7 @@
       "queries": [
         "tripleS 정하연 SIGNAL"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "UUaAONkgb5Q",
@@ -4490,7 +5237,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "1cP0jzToXRk",
@@ -4511,9 +5258,10 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS NXT 하연 직캠"
+        "tripleS NXT 하연 직캠",
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "9yyHcaWcVrQ",
@@ -4536,9 +5284,10 @@
       "queries": [
         "#트리플에스 #정하연",
         "tripleS Jeong HaYeon fancam",
-        "tripleS 정하연 직캠"
+        "tripleS 정하연 직캠",
+        "트리플에스 정하연 무대"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "hOxwNVk--UQ",
@@ -4561,7 +5310,7 @@
       "queries": [
         "tripleS HaYeon KBS MBC SBS Mnet"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "KRUz8PsL3l4",
@@ -4584,7 +5333,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "WpSFl_zXkkg",
@@ -4605,9 +5354,9 @@
       "reviewPriority": "high",
       "sourceKind": "channel-unverified",
       "queries": [
-        "tripleS 정하연 SIGNAL"
+        "tripleS 하연 입덕직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "nCqL3mrAwKA",
@@ -4630,7 +5379,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "Mwb1DnJSuy8",
@@ -4653,7 +5402,7 @@
       "queries": [
         "tripleS NXT 하연 직캠"
       ],
-      "status": "pending"
+      "status": "published"
     },
     {
       "youtubeId": "FwQRjF83aYg",
@@ -4677,7 +5426,30 @@
         "tripleS NXT 하연 직캠",
         "tripleS msnz zenith 하연"
       ],
-      "status": "pending"
+      "status": "published"
+    },
+    {
+      "youtubeId": "3SCF2HhsHxY",
+      "title": "tripleS NXT 너무 귀엽잖아!? | EN CN | SIGNAL 240105",
+      "category": "signal",
+      "subCategory": "signal",
+      "publishedAt": "2024-01-05",
+      "memberIds": [
+        "S19"
+      ],
+      "group": "NXT",
+      "scope": "unit",
+      "source": "tripleS official",
+      "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+      "videoUrl": "https://www.youtube.com/watch?v=3SCF2HhsHxY",
+      "verified": false,
+      "note": "YouTube 공개 링크 · 정하연(S19) 실제 출연 및 출처 개별 검토 필요",
+      "reviewPriority": "check",
+      "sourceKind": "channel-unverified",
+      "queries": [
+        "tripleS 정하연 SIGNAL"
+      ],
+      "status": "published"
     }
   ]
 }
