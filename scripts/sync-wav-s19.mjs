@@ -10,8 +10,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SOURCE_PREFIX = 'https://raw.githubusercontent.com/bbanghayeon/wav-archive/main/objekt-collection/data/';
-const IMAGE_BASE = 'https://bbanghayeon.github.io/wav-archive/objekt-collection/';
+const SOURCE_PREFIX = 'https://raw.githubusercontent.com/bbangshion/wav-archive/main/objekt-collection/data/';
+const IMAGE_BASE = 'https://bbangshion.github.io/wav-archive/objekt-collection/';
 const FEEDS = ['objekt-top.json', 'apollo.json'];
 const OUTPUT = path.resolve('public/data/objekt.json');
 const MAX_BYTES = 60 * 1024 * 1024;
@@ -34,7 +34,7 @@ function isS19(value) {
   if (Array.isArray(value)) return value.some(isS19);
   if (isObject(value)) return ['id', 'code', 'member', 'memberId', 'slug', 'name', 'nameKo', 'nameEn', 'number'].some(k=>isS19(value[k]));
   const label = asText(value).normalize('NFKC').toUpperCase().replace(/[\s._\-]/g, '');
-  return /^(S19|S19HAYEON|19|HAYEON|SION|JEONGHAYEON|정하연)$/.test(label);
+  return /^(S19|S19HAYEON|19|HAYEON|JEONGHAYEON|정하연)$/.test(label);
 }
 function isHayeon(row) {
   if (!isObject(row)) return false;
