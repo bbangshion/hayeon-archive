@@ -1,0 +1,35 @@
+name: Sync HAYEON S19 Objekts from WAV ARCHIVE
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: hayeon-objekt-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify S19 converter
+        run: node scripts/sync-wav-s19.mjs --self-test
+      - name: Import real WAV S19 cards
+        run: node scripts/sync-wav-s19.mjs
+      - name: Validate member isolation
+        run: node scripts/audit-hayeon.mjs
+      - name: Commit only validated S19 data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- public/data/objekt.json
+          if git diff --cached --quiet; then
+            echo 'No data changes.'
+          else
+            git commit -m 'data: sync confirmed HAYEON S19 Objekts'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
