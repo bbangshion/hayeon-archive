@@ -1,0 +1,90 @@
+name: HAYEON - Sync YEONJI Master Design (UI Only)
+'on':
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: preview = no changes / apply = CSS-only + production build
+        type: choice
+        options:
+        - preview
+        - apply
+        default: preview
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: hayeon-master-design
+  cancel-in-progress: false
+jobs:
+  unify:
+    if: github.repository == 'bbangshion/hayeon-archive' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - name: Check out HAYEON
+      uses: actions/checkout@v4
+    - name: Apply or preview UI-only synchronisation
+      env:
+        MODE: ${{ inputs.mode }}
+      shell: bash
+      run: "python3 - <<'PY'\nfrom pathlib import Path\nimport base64, zlib, hashlib, os, sys\nroot = Path.cwd()\nmode = os.environ.get('MODE',\
+        \ 'preview')\nassert mode in ('preview','apply')\nsource = (root/'src/main.tsx')\napp = (root/'src/App.tsx')\nstyle\
+        \ = (root/'src/index.css')\ndata = (root/'public/data/objekt.json')\nif not all(p.is_file() for p in (source,app,style,data)):\n\
+        \    sys.exit('STOP: HAYEON source structure differs; no changes made.')\napp_txt = app.read_text(encoding='utf-8')\n\
+        main_txt = source.read_text(encoding='utf-8')\nif not ('HAYEON ARCHIVE' in app_txt and 'TRIPLES S19' in app_txt and\
+        \ 'hayeon-home.jpg' in app_txt):\n    sys.exit('STOP: not an S19 HAYEON archive; no changes made.')\nif \"import './index.css';\"\
+        \ not in main_txt:\n    sys.exit('STOP: entry point does not match inspected source; no changes made.')\ncss = zlib.decompress(base64.b64decode(''.join('''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'''.split()))).decode('utf-8')\nexpected_css_sha = '02ccff8f2cf989b998261a4b3c6ec3fe257321bc75c74a703ff65ad245a2a5ab'\n\
+        if hashlib.sha256(css.encode()).hexdigest() != expected_css_sha:\n    sys.exit('STOP: style payload integrity mismatch.')\n\
+        if '#52D9BB' not in css or '.shion-header-inner' not in css:\n    sys.exit('STOP: identity or shared selectors missing.')\n\
+        if \"import './archive-family.css';\" not in main_txt:\n    next_main = main_txt.replace(\"import './index.css';\"\
+        , \"import './index.css';\\nimport './archive-family.css';\", 1)\nelse:\n    next_main = main_txt\nif mode == 'preview':\n\
+        \    print('PREVIEW: only src/main.tsx and src/archive-family.css would change.')\nelse:\n    family = root/'src/archive-family.css'\n\
+        \    if family.exists() and family.read_text(encoding='utf-8') != css and 'ARCHIVE FAMILY 01' not in family.read_text(encoding='utf-8'):\n\
+        \        sys.exit('STOP: existing archive-family.css has unexpected content; refuse overwrite.')\n    family.write_text(css,\
+        \ encoding='utf-8')\n    source.write_text(next_main, encoding='utf-8')\n    print('APPLY: installed YEONJI master\
+        \ visual system with HAYEON theme.')\nprint('PROTECTED: src/App.tsx, all member data, objekts, hooks, routing and\
+        \ screen components.')\nprint('NOTE: structurally different screens (e.g. Film, Profile) keep their own working JSX\
+        \ and behavior.')\nPY\n"
+    - name: Check JS/JSON untouched
+      shell: bash
+      run: "python3 - <<'PY'\nfrom pathlib import Path\nimport subprocess, sys\nchanged = subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()\n\
+        allowed = {'src/main.tsx','src/archive-family.css'}\nif set(changed)-allowed:\n    sys.exit('STOP: unexpected tracked\
+        \ files changed: '+str(set(changed)-allowed))\nprint('tracked file changes:',changed)\nPY\n"
+    - name: Node 22
+      if: inputs.mode == 'apply'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - name: Verify source member data
+      if: inputs.mode == 'apply'
+      run: node scripts/audit-hayeon.mjs
+    - name: Install dependencies
+      if: inputs.mode == 'apply'
+      run: npm install --no-audit --no-fund
+    - name: Build the exact HAYEON UI
+      if: inputs.mode == 'apply'
+      run: npm run build
+    - name: Commit only visual files
+      if: inputs.mode == 'apply'
+      env:
+        GH_REF: ${{ github.ref_name }}
+      shell: bash
+      run: "git config user.name \"github-actions[bot]\"\ngit config user.email \"41898282+github-actions[bot]@users.noreply.github.com\"\
+        \ngit add -- src/main.tsx src/archive-family.css\nif git diff --cached --quiet; then\n  echo 'No visual changes to\
+        \ commit.'\nelse\n  git commit -m 'style: sync HAYEON visual design with YEONJI master'\n  git push origin \"HEAD:${GH_REF}\"\
+        \nfi\n"
