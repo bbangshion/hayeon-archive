@@ -1,0 +1,150 @@
+name: HAYEON - Restore FILM S19 Filter (0 Videos)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'preview = diagnose without modifying; apply = fix, build and deploy'
+        type: choice
+        options: [preview, apply]
+        default: preview
+        required: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: hayeon-film-s19-restoration
+  cancel-in-progress: false
+
+jobs:
+  diagnose-and-fix:
+    name: Diagnose S19 film binding and build safely
+    if: github.repository == 'bbangshion/hayeon-archive' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Verify and selectively correct S19 film member filter
+        env:
+          MODE: ${{ inputs.mode }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+
+          path = Path('src/lib/films.ts')
+          data = Path('public/data/films.json')
+          mode = os.environ['MODE']
+          if not path.is_file() or not data.is_file():
+              raise SystemExit('STOP: FILM code or data missing. No files changed.')
+
+          original = path.read_text(encoding='utf-8')
+          payload = json.loads(data.read_text(encoding='utf-8'))
+          rows = payload if isinstance(payload, list) else payload.get('items', payload.get('videos')) if isinstance(payload, dict) else None
+          if not isinstance(rows, list):
+              raise SystemExit('STOP: Unknown films.json schema; no data overwritten.')
+
+          def ids_for(row):
+              value = row.get('memberIds', row.get('members', row.get('memberId', row.get('member'))))
+              values = value if isinstance(value, list) else [value]
+              ids = []
+              for v in values:
+                  if isinstance(v, dict):
+                      v = v.get('id', v.get('memberId', v.get('name', '')))
+                  if isinstance(v, str):
+                      ids.append(re.sub(r'[\s._-]', '', v.lower()))
+              return ids
+
+          s19_rows = [r for r in rows if isinstance(r, dict) and any(v in ('s19','s19hayeon','hayeon','jeonghayeon','junghayeon','정하연','하연') for v in ids_for(r))]
+          print(f'[FILM] Raw data records: {len(rows)}; S19 member-tagged: {len(s19_rows)}')
+
+          match = re.search(r'function\s+hasS19\s*\([^)]*\)\s*:\s*boolean\s*\{(?P<body>.*?)\n\}',original,re.S)
+          if not match:
+              raise SystemExit('STOP: hasS19 implementation differs from expected; refusing blind rewrite.')
+          body = match.group('body')
+          arr = re.search(r'return\s*\[(?P<ids>[^\]]*)\]\.includes\(s\)',body,re.S)
+          if not arr:
+              raise SystemExit('STOP: Unknown hasS19 filter syntax; no change.')
+          old_ids = re.findall(r"['\"]([^'\"]+)['\"]",arr.group('ids'))
+          print('[FILM] Current accepted member tags:', ', '.join(old_ids))
+          # The previous YEONJI-derived UI upgrade accidentally inserted S12 tags
+          # in HAYEON's S19 filtering function, hiding every correctly tagged film.
+          correct = ['s19','s19hayeon','hayeon','jeonghayeon','junghayeon','정하연','하연']
+          if any(x in old_ids for x in ('s12','s12hayeon','kwakhayeon')) or 's19' not in old_ids:
+              replacement = 'return [' + ', '.join(repr(x) for x in correct) + '].includes(s)'
+              new_body = body[:arr.start()] + replacement + body[arr.end():]
+              changed = original[:match.start('body')] + new_body + original[match.end('body'):]
+              print('[FILM] BUG DETECTED: invalid S12 identity values found in S19 filter; targeted fix prepared.')
+          else:
+              changed = original
+              print('[FILM] S19 tags already present; no code change required.')
+
+          if s19_rows and 's19' not in correct:
+              raise SystemExit('Unexpected S19 check failure')
+          if not s19_rows:
+              print('[FILM] WARNING: films.json currently contains no S19-tagged videos. Filter fix alone cannot populate it.')
+              if mode == 'apply':
+                  raise SystemExit('STOP: No S19 video records. Restore the published films.json before changing UI.')
+          if mode == 'apply' and changed != original:
+              path.write_text(changed, encoding='utf-8')
+              print('[FILM] Patched only src/lib/films.ts. Data, UI and state unchanged.')
+          elif mode != 'apply':
+              print('[FILM] Preview only. No files changed.')
+          summary = os.getenv('GITHUB_STEP_SUMMARY')
+          if summary:
+              with open(summary, 'a', encoding='utf-8') as f:
+                  f.write(f'## HAYEON S19 FILM diagnosis\n\n- Raw films: **{len(rows)}**\n- S19-tagged films: **{len(s19_rows)}**\n- Wrong S12 tags present: **{any(x in old_ids for x in ("s12","s12hayeon","kwakhayeon"))}**\n- Execution: **{mode}**\n- JSON: unchanged\n\n')
+          PY
+      - name: Set up Node.js 22
+        if: inputs.mode == 'apply'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build existing HAYEON source without touching media
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+      - name: Commit only the validated S19 film adapter
+        if: inputs.mode == 'apply'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- src/lib/films.ts
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix: restore HAYEON S19 film member filtering'
+            git push origin HEAD:main
+          else
+            echo 'No changes to film adapter required.'
+          fi
+      - name: Configure GitHub Pages
+        if: inputs.mode == 'apply'
+        uses: actions/configure-pages@v5
+      - name: Upload verified site bundle
+        if: inputs.mode == 'apply'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy restored FILM page
+    if: inputs.mode == 'apply' && github.repository == 'bbangshion/hayeon-archive' && github.ref == 'refs/heads/main'
+    needs: [diagnose-and-fix]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
