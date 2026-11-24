@@ -1,0 +1,86 @@
+name: HAYEON - Hero Accent White Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "preview = build only / apply = patch + commit"
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - apply
+
+permissions:
+  contents: write
+
+jobs:
+  hero-accent-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Patch HAYEON hero accent styling
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f src/index.css || { echo 'src/index.css not found'; exit 1; }
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('src/index.css')
+          text = path.read_text(encoding='utf-8')
+
+          start = '/* HAYEON HERO ACCENT FIX START */'
+          end = '/* HAYEON HERO ACCENT FIX END */'
+          block = '''/* HAYEON HERO ACCENT FIX START */
+/* Hero button and divider line are white; top TRIPLES S19 line uses a softer fitting tone. */
+.shion-hero-overline { color: #d9cbc5; }
+.shion-hero-overline span { background: #d9cbc5; }
+.shion-hero-rule { background: rgba(255,255,255,.92); }
+.shion-hero-primary {
+  background: #ffffff;
+  color: #101014;
+  border-color: rgba(255,255,255,.92);
+}
+.shion-hero-primary:hover { background: #ece9eb; }
+/* HAYEON HERO ACCENT FIX END */'''
+
+          pattern = re.compile(re.escape(start) + r'.*?' + re.escape(end), re.S)
+          if pattern.search(text):
+              text = pattern.sub(block, text)
+          else:
+              if not text.endswith('\n'):
+                  text += '\n'
+              text += '\n' + block + '\n'
+
+          path.write_text(text, encoding='utf-8')
+          print('Patched src/index.css successfully.')
+          PY
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Commit patched files
+        if: ${{ inputs.mode == 'apply' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/index.css
+          git diff --cached --quiet && { echo 'No changes to commit'; exit 0; }
+          git commit -m "style: refine HAYEON hero accent tones"
+          git push
