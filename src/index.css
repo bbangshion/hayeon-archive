@@ -851,3 +851,16 @@ body, .shion-home, .shion-hero, .shion-subpage, .shion-footer, .archive-tab-bar 
 .shion-feature-card:hover,.shion-overview-photo:hover{border-color:rgba(82,217,187,.42)}
 @media(max-width:680px){.shion-hero-image img{object-position:50% 39%}.shion-hero-copy h1{font-size:clamp(58px,12vw,100px)}}
 @media (prefers-reduced-motion:reduce){.shion-hero-image,.shion-feature-card{animation:none;transition:none}}
+
+/* HAYEON HERO ACCENT FIX START */
+/* Hero button and divider line are white; top TRIPLES S19 line uses a softer fitting tone. */
+.shion-hero-overline { color: #d9cbc5; }
+.shion-hero-overline span { background: #d9cbc5; }
+.shion-hero-rule { background: rgba(255,255,255,.92); }
+.shion-hero-primary {
+  background: #ffffff;
+  color: #101014;
+  border-color: rgba(255,255,255,.92);
+}
+.shion-hero-primary:hover { background: #ece9eb; }
+/* HAYEON HERO ACCENT FIX END */
