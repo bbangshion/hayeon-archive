@@ -7,6 +7,11 @@ type L = 'ko'|'en'|'ja';
 type LText = Record<L,string>;
 const text = (ko:string, en:string, ja:string): LText => ({ko,en,ja});
 const facts = [
+  {name:text("혈액형","Blood type","血液型"), value:text("A","A","A")},
+  {name:text("MBTI","MBTI","MBTI"), value:text("ENTP","ENTP","ENTP")},
+  {name:text("영어 이름","English name","英語名"), value:text("Luna Jeong","Luna Jeong","Luna Jeong")},
+  {name:text("첫 유닛곡","First unit release","初ユニット曲"), value:text("Just Do It","Just Do It","Just Do It")},
+
   {name:text('본명','Full name','本名'), value:text('정하연','Jeong HaYeon','チョン・ハヨン')},
   {name:text('활동명','Stage name','活動名'), value:text('하연 · HaYeon','HaYeon','ハヨン')},
   {name:text('소속 그룹','Group','所属グループ'), value:text('tripleS','tripleS','tripleS')},
@@ -27,6 +32,10 @@ const units = [
    desc:text('msnz의 6인 유닛으로 〈Q&A〉를 발표했습니다.','Six-member msnz unit that released Q&A.','msnzの6人ユニット。「Q&A」をリリースしました。')},
 ];
 const references = [
+  {label:"\ub098\ubb34\uc704\ud0a4 \u00b7 \uc815\ud558\uc5f0", url:"https://m.namu.moe/w/%EC%A0%95%ED%95%98%EC%97%B0"},
+  {label:"tripleS Wiki \u00b7 Facts", url:"https://triples.fandom.com/wiki/Jeong_HaYeon/Facts"},
+  {label:"KProfiles \u00b7 HaYeon", url:"https://kprofiles.com/jeong-hayeon-triples-profile-and-facts/"},
+
   {label:'tripleS Official Profile', url:'https://www.triples-official.jp/profile/'},
   {label:'tripleS Wiki — Jeong HaYeon', url:'https://triples.fandom.com/wiki/Jeong_HaYeon'},
   {label:'tripleS WAV — HaYeon', url:'https://triplesfans.com/members/hayeon'},
@@ -42,7 +51,7 @@ export function ProfilePage() {
       <p>tripleS · HaYeon</p>
     </header>
     <nav aria-label={t(text('프로필 목차','Profile sections','プロフィール目次'))} className="-mx-1 mb-10 flex gap-2 overflow-x-auto px-1 pb-3 sm:mb-12">
-      {[['basic',text('소개','About','紹介')],['units',text('유닛','Units','ユニット')],['history',text('활동 기록','History','活動記録')],['references',text('출처','Sources','出典')]] .map(([id,label])=><a key={id as string} href={`#profile-${id}`} onClick={e=>{e.preventDefault();document.getElementById(`profile-${id}`)?.scrollIntoView({behavior:'smooth',block:'start'});}} className="shrink-0 rounded-sm border border-white/[.12] bg-white/[.025] px-3.5 py-2.5 text-[12px] text-[#cfc6cf] hover:border-[#52D9BB] hover:text-white">{t(label as LText)}</a>)}
+      {[['basic',text('소개','About','紹介')],['units',text('유닛','Units','ユニット')],['history',text('활동 기록','History','活動記録')],['nicknames',text('별명','Nicknames','愛称')],['interests',text('취향','Interests','趣味')],['references',text('출처','Sources','出典')]] .map(([id,label])=><a key={id as string} href={`#profile-${id}`} onClick={e=>{e.preventDefault();document.getElementById(`profile-${id}`)?.scrollIntoView({behavior:'smooth',block:'start'});}} className="shrink-0 rounded-sm border border-white/[.12] bg-white/[.025] px-3.5 py-2.5 text-[12px] text-[#cfc6cf] hover:border-[#52D9BB] hover:text-white">{t(label as LText)}</a>)}
     </nav>
     <div id="profile-basic" className="shion-profile-intro scroll-mt-28">
       <figure className="shion-profile-portrait">
@@ -81,6 +90,20 @@ export function ProfilePage() {
       </details>)}</div>
     </section>
     <div id="profile-history" className="mt-20 scroll-mt-28 sm:mt-28"><ProfileHistory/></div>
+    <section id="profile-nicknames" className="mt-20 scroll-mt-28 sm:mt-28"><span className="shion-page-kicker">NICKNAMES</span><h2 className="mt-2 mb-7 text-[clamp(26px,4vw,37px)] font-medium tracking-[-.055em]">{t(text("별명","Nicknames","愛称"))}</h2><div className="grid gap-3 sm:grid-cols-2">
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("하요이","Hayoi","ハヨイ"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("라이브와 팬 소통에서 사용되는 애칭.","A nickname used in fan interactions.","ファンとの交流で使われる愛称。"))}</p><a href="https://m.namu.moe/w/%EC%A0%95%ED%95%98%EC%97%B0" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("육각대장","Hexagon captain","六角隊長"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("개인 팬들의 애칭인 육각단에서 유래.","Derived from her personal fan nickname, Hexagon.","個人ファンの呼称「六角団」に由来。"))}</p><a href="https://m.namu.moe/w/%EC%A0%95%ED%95%98%EC%97%B0" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("정하석","HaSeok","ハソク"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("시크한 모습을 표현하는 별명.","A nickname for her cool persona.","クールな姿を表す愛称。"))}</p><a href="https://m.namu.moe/w/%EC%A0%95%ED%95%98%EC%97%B0" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("고슴도치 · 햄스터 · 고양이 · 초코볼","Hedgehog · Hamster · Cat · Chocoball","ハリネズミ・ハムスター・猫・チョコボール"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("팬 프로필에 기록된 애칭.","Nicknames recorded in fan profiles.","ファンプロフィールに掲載される愛称。"))}</p><a href="https://triples.fandom.com/wiki/Jeong_HaYeon/Facts" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+    </div></section>
+    <section id="profile-interests" className="mt-20 scroll-mt-28 sm:mt-28"><span className="shion-page-kicker">INTERESTS</span><h2 className="mt-2 mb-7 text-[clamp(26px,4vw,37px)] font-medium tracking-[-.055em]">{t(text("취향","Interests","趣味"))}</h2><div className="grid gap-3 sm:grid-cols-2">
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("음식","Food","食べ物"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("해산물, 고기, 초밥, 라면, 케이크, 마카롱","Seafood, meat, sushi, ramen, cake and macarons","海鮮、肉、寿司、ラーメン、ケーキ、マカロン"))}</p><a href="https://triples.fandom.com/wiki/Jeong_HaYeon/Facts" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("취미","Hobbies","趣味"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("글쓰기, 맛있는 음식 즐기기, 예쁜 카페 찾기","Writing, enjoying food and discovering cafés","文章を書くこと、食事、カフェ巡り"))}</p><a href="https://triples.fandom.com/wiki/Jeong_HaYeon/Facts" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("캐릭터","Characters","キャラクター"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("토토로, 미니언즈, 패티","Totoro, Minions and Petty","トトロ、ミニオンズ、ペティ"))}</p><a href="https://triples.fandom.com/wiki/Jeong_HaYeon/Facts" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("좋아하는 노래","Favorite songs","好きな曲"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("Complexity · Cherry Talk","Complexity · Cherry Talk","Complexity · Cherry Talk"))}</p><a href="https://kprofiles.com/jeong-hayeon-triples-profile-and-facts/" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("특기","Skills","特技"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("초상화 그리기와 높은 음역의 발성","Portrait drawing and high notes","似顔絵と高音の発声"))}</p><a href="https://triples.fandom.com/wiki/Jeong_HaYeon/Facts" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+      <article className="rounded-sm border border-white/[.1] bg-white/[.025] p-6"><h3 className="text-[17px] font-medium">{t(text("여가","Leisure","余暇"))}</h3><p className="mt-3 text-[12px] leading-6 text-ash">{t(text("공포 영화와 공포 체험","Horror films and spooky experiences","ホラー映画や恐怖体験"))}</p><a href="https://m.namu.moe/w/%EC%A0%95%ED%95%98%EC%97%B0" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-[11px] text-[#52D9BB]">{t(text('출처','Source','出典'))} ↗</a></article>
+    </div></section>
     <section id="profile-references" className="mt-16 scroll-mt-28">
       <span className="shion-page-kicker">REFERENCES</span>
       <h2 className="mt-2 text-2xl">{t(text('자료와 출처','Sources','出典'))}</h2>
